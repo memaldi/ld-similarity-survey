@@ -1,0 +1,81 @@
+<html>
+    <head>
+        <link href="/static/css/bootstrap.min.css" rel="stylesheet">
+        <style>
+            body {
+              padding-top: 50px;
+            }
+            .starter-template {
+              padding: 40px 15px;
+              text-align: center;
+            }
+        </style>
+        <title>LD Similarity survey</title>
+    </head>
+    <body>
+        <div class="navbar navbar-inverse navbar-fixed-top" role="navigation">
+          <div class="container">
+            <div class="navbar-header">
+              <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="/survey">LD Similarity Survey</a>
+        </div>
+        <div class="collapse navbar-collapse">
+          <ul class="nav navbar-nav">
+            <li class="active"><a href="/survey">The Survey</a></li>
+            <li><a href="#about">About</a></li>
+        </ul>
+    </div><!--/.nav-collapse -->
+    </div>
+    </div>
+
+    <div class="container">
+        <div class="starter-template">
+            <h1>Linked Data Similarity Survey</h1>
+            <p class="lead">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Cras vitae justo nec lacus mattis laoreet vitae sed nunc. In hac habitasse platea dictumst. Ut eu lectus justo. Etiam nunc mauris, consectetur et tristique vitae, commodo et neque. Duis vitae lacinia mi, vel ultricies purus. Nam et tellus sed erat lacinia tristique. Praesent dapibus metus et felis dignissim, et porttitor felis venenatis. Aliquam felis elit, adipiscing faucibus lorem id, bibendum ultricies nibh. Mauris eget blandit ipsum, in auctor ipsum.
+            </p>
+        </div>
+
+        <div class="row">
+            <div class="col-lg-6">
+                <p> <b>Title:</b> {{source_dataset.title}} </p>
+
+                <p style="text-align:justify;text-justify:inter-word;"> <b>Description:</b> {{source_dataset.description}} </p>
+
+                <p> <b>DataHub URL:</b> <a href="{{source_dataset.datahub_url}}" target="_blank">{{source_dataset.datahub_url}}</a> </p>
+
+                <p> <b>Example resource:</b> <a href="{{source_dataset.example_resource}}" target="_blank">{{source_dataset.example_resource}}</a> </p>
+                <br />
+            </div>
+            <div class="col-lg-6">
+                <p> <b>Title:</b> {{target_dataset.title}} </p>
+
+                <p style="text-align:justify;text-justify:inter-word;"> <b>Description:</b> {{target_dataset.description}} </p>
+
+                <p> <b>DataHub URL:</b> <a href="{{target_dataset.datahub_url}}" target="_blank">{{target_dataset.datahub_url}}</a> </p>
+
+                <p> <b>Example resource:</b> <a href="{{target_dataset.example_resource}}" target="_blank">{{target_dataset.example_resource}}</a> </p>
+                <br />
+            </div>
+        </div>
+        <br />
+        <div class="well">
+            <form action="/survey/" method="post">{% csrf_token %}
+                <b>¿Are these datasets similar or are they related?</b> {{ form.similarity }}
+            <input type="hidden" name="source_dataset_id" value="{{source_dataset.id}}"/>
+            <input type='hidden' name="target_dataset_id" value="{{target_dataset.id}}" />
+            <input type="submit" value="Submit" />
+        </div>
+
+    </div>
+
+    <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
+    <!-- Include all compiled plugins (below), or include individual files as needed -->
+    <script src="/static/js/bootstrap.min.js"></script>
+    </body>
+</html>
