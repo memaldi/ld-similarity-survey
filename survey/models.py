@@ -12,4 +12,9 @@ class Dataset(models.Model):
 class Similarity(models.Model):
     source_dataset = models.ForeignKey(Dataset, related_name='source_dataset')
     target_dataset = models.ForeignKey(Dataset, related_name='target_dataset')
-    similarity = models.BooleanField()
+    choices = (
+        ('yes', 'Yes'),
+        ('no', 'NO'),
+        ('undefined', 'Undefined'),
+        )
+    similarity = models.CharField(max_length=10, choices=choices, default='undefined')
