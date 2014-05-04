@@ -35,3 +35,6 @@ def survey(request):
         form = SurveyForm(initial={'similarity': 'undefined'})
 
         return render(request, 'survey/survey.html', {'form': form, 'source_dataset': source_dataset, 'target_dataset': target_dataset})
+
+def about(request):
+    return render(request, 'survey/about.html')
