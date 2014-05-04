@@ -36,7 +36,7 @@
     <div class="container">
         <div class="starter-template">
             <h1>Linked Data Similarity Survey</h1>
-            <p class="lead">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Cras vitae justo nec lacus mattis laoreet vitae sed nunc. In hac habitasse platea dictumst. Ut eu lectus justo. Etiam nunc mauris, consectetur et tristique vitae, commodo et neque. Duis vitae lacinia mi, vel ultricies purus. Nam et tellus sed erat lacinia tristique. Praesent dapibus metus et felis dignissim, et porttitor felis venenatis. Aliquam felis elit, adipiscing faucibus lorem id, bibendum ultricies nibh. Mauris eget blandit ipsum, in auctor ipsum.
+            <p class="lead">The objetive of this survey is to stablish similarities among Linked Datasets. Above, two datasets can be seen, with their title, description and an example resource given from their <a href="http://datahub.io/">DataHub.io</a> profile. Based on the information given and exploring their <a href="http://datahub.io/">DataHub.io</a> URL, the objective is to answer to the question 'Are these datasets similar or does exist any clear relationship between them?'. Reloading this page shows two new random datasets, you can complete this survey as many times as you want. Thank you for your time! ;-)
             </p>
         </div>
 
@@ -65,7 +65,7 @@
         <br />
         <div class="well">
             <form action="/survey/" method="post">{% csrf_token %}
-                <b>¿Are these datasets similar or are they related?</b> {{ form.similarity }}
+                <b>Are these datasets similar or does exist any clear relationship between them?</b> {{ form.similarity }}
             <input type="hidden" name="source_dataset_id" value="{{source_dataset.id}}"/>
             <input type='hidden' name="target_dataset_id" value="{{target_dataset.id}}" />
             <input type="submit" value="Submit" />
