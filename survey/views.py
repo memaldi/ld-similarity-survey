@@ -1,4 +1,5 @@
 import redis
+import itertools
 from django.shortcuts import render
 from survey.forms import SurveyForm, UserForm
 from survey.models import Dataset, Similarity, UserProfile
@@ -13,6 +14,7 @@ from django.contrib.auth.decorators import login_required
 @login_required
 def survey(request):
     user = request.user
+
     if request.method == 'POST':
         form = SurveyForm(request.POST)
         if form.is_valid():
@@ -27,42 +29,30 @@ def survey(request):
                 similarity = Similarity.objects.create(source_dataset=source_dataset, target_dataset=target_dataset, similarity=similarity_str)
                 similarity.save()
                 user.userprofile.rated_datasets.add(similarity)
-            return render(request, 'survey/thanks.html')
 
-    else:
-        id_list = []
+    selected_source_dataset = None
+    selected_target_dataset = None
 
-        selected_source_dataset = None
-        selected_target_dataset = None
+    found = False
 
-        found = False
+    combinations = itertools.combinations(Dataset.objects.all(), 2)
 
-        for source_dataset in Dataset.objects.all():
-            if found:
+    for source_dataset, target_dataset in combinations:
+        similarity = Similarity.objects.filter(source_dataset=source_dataset, target_dataset=target_dataset)
+        if len(similarity) < 3:
+            try:
+                user_rating = user.userprofile.rated_datasets.get(source_dataset=source_dataset, target_dataset=target_dataset)
+            except:
+                user_rating = None
+            if user_rating == None:
+                print user_rating
+                selected_source_dataset = source_dataset
+                selected_target_dataset = target_dataset
                 break
-            for target_dataset in Dataset.objects.all():
-                if found:
-                    break
-                if source_dataset.id != target_dataset.id and (source_dataset.id, target_dataset.id) not in id_list:
-                    similarity = Similarity.objects.filter(source_dataset=source_dataset, target_dataset=target_dataset)
-                    if len(similarity) < 3:
-                        print source_dataset.id, target_dataset.id
-                        try:
-                            user_rating = user.userprofile.rated_datasets.get(source_dataset=source_dataset, target_dataset=target_dataset)
-                        except:
-                            user_rating = None
-                        print user_rating
-                        if user_rating == None:
-                            selected_source_dataset = source_dataset
-                            selected_target_dataset = target_dataset
-                            found = True
 
-        # source_dataset = Dataset.objects.get(id=source_id)
-        # target_dataset = Dataset.objects.get(id=target_id)
+    form = SurveyForm(initial={'similarity': 'undefined'})
 
-        form = SurveyForm(initial={'similarity': 'undefined'})
-
-        return render(request, 'survey/survey.html', {'form': form, 'source_dataset': selected_source_dataset, 'target_dataset': selected_target_dataset})
+    return render(request, 'survey/survey.html', {'form': form, 'source_dataset': selected_source_dataset, 'target_dataset': selected_target_dataset})
 
 def about(request):
     return render(request, 'survey/about.html')
