@@ -43,32 +43,36 @@
 
     <div class="container">
         <div class="starter-template">
-            <form id="user_form" method="post" action="/register/" class="form-horizontal">
-                {% csrf_token %}
-                <div class="form-group {% if errors.user_error %} has-error {% endif %}">
-                    <label for="user" class="col-sm-5 control-label">Username</label>
-                    <div class="col-sm-3">
-                        <input type="text" class="form-control" id="user" placeholder="Username" name="user" data-toggle="tooltip" data-placement="right" title="Username already in use!" {% if user_form.username.value != None %} value="{{user_form.username.value}}" {% endif %}>
+            {% if registered %}
+            <h2>Thank you for registering, you can <a href="/survey">start the survey</a> now!</h2>
+            {% else %}
+                <form id="user_form" method="post" action="/register/" class="form-horizontal">
+                    {% csrf_token %}
+                    <div class="form-group {% if errors.user_error %} has-error {% endif %}">
+                        <label for="user" class="col-sm-5 control-label">Username</label>
+                        <div class="col-sm-3">
+                            <input type="text" class="form-control" id="user" placeholder="Username" name="user" data-toggle="tooltip" data-placement="right" title="Username already in use!" {% if user_form.username.value != None %} value="{{user_form.username.value}}" {% endif %}>
+                        </div>
                     </div>
-                </div>
-                <div class="form-group {% if errors.empty_password %} has-error {% endif %}">
-                    <label for="password" class="col-sm-5 control-label">Password</label>
-                    <div class="col-sm-3">
-                        <input type="password" class="form-control" id="password" placeholder="Password" name="password" data-toggle="tooltip" data-placement="right" title="This field is required!">
+                    <div class="form-group {% if errors.empty_password %} has-error {% endif %}">
+                        <label for="password" class="col-sm-5 control-label">Password</label>
+                        <div class="col-sm-3">
+                            <input type="password" class="form-control" id="password" placeholder="Password" name="password" data-toggle="tooltip" data-placement="right" title="This field is required!">
+                        </div>
                     </div>
-                </div>
-                <div class="form-group {% if errors.different_passwords %} has-error {% endif %}">
-                    <label for="password-repeat" class="col-sm-5 control-label">Repeat Password</label>
-                    <div class="col-sm-3">
-                        <input type="password" class="form-control" id="password-repeat" placeholder="Password" name="password-repeat" data-toggle="tooltip" data-placement="right" title="Passwords do not match!">
+                    <div class="form-group {% if errors.different_passwords %} has-error {% endif %}">
+                        <label for="password-repeat" class="col-sm-5 control-label">Repeat Password</label>
+                        <div class="col-sm-3">
+                            <input type="password" class="form-control" id="password-repeat" placeholder="Password" name="password-repeat" data-toggle="tooltip" data-placement="right" title="Passwords do not match!">
+                        </div>
                     </div>
-                </div>
-                <div class="form-group">
-                    <div class="col-sm-offset-2 col-sm-5">
-                        <input type="submit" name="submit" value="Submit" class="btn btn-default"/>
+                    <div class="form-group">
+                        <div class="col-sm-offset-2 col-sm-5">
+                            <input type="submit" name="submit" value="Submit" class="btn btn-default"/>
+                        </div>
                     </div>
-                </div>
-            </form>
+                </form>
+            {% endif %}
         </div>
     </div>
 

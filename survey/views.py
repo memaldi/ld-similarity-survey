@@ -5,6 +5,8 @@ from survey.models import Dataset, Similarity
 from django.contrib.auth.models import User
 from random import randint
 from django.db.utils import IntegrityError
+from django.contrib.auth import authenticate
+from django.http import HttpResponseRedirect
 # Create your views here.
 
 def survey(request):
@@ -54,27 +56,51 @@ def about(request):
     return render(request, 'survey/about.html')
 
 def register(request):
-    errors = {}
-    if request.POST:
-        print request.POST
-        username = request.POST['user']
-        password = request.POST['password']
-        repeat_password = request.POST['password-repeat']
-        user_form = UserForm(data={'username': username})
-        if len(password) <= 0:
-            errors['empty_password'] = 'This field is required!'
-        elif password != repeat_password:
-            errors['different_passwords'] = 'Passwords do not match!'
-        else:
-            try:
-                user = User()
-                user.username = username
-                user.password = password
-                user.save()
-            except IntegrityError:
-                errors['user_error'] = 'User already exists!'
-            except Exception as e:
-                print e
+    if request.META['USER']:
+        return HttpResponseRedirect('/survey')
     else:
-        user_form = UserForm()
-    return render(request, 'survey/register.html', {'user_form': user_form, 'errors': errors})
+        errors = {}
+        registered =  False
+        if request.POST:
+            print request.POST
+            username = request.POST['user']
+            password = request.POST['password']
+            repeat_password = request.POST['password-repeat']
+            user_form = UserForm(data={'username': username})
+            if len(password) <= 0:
+                errors['empty_password'] = 'This field is required!'
+            elif password != repeat_password:
+                errors['different_passwords'] = 'Passwords do not match!'
+            else:
+                try:
+                    user = User()
+                    user.username = username
+                    user.password = password
+                    user.save()
+                    registered = True
+                    login(request, user)
+                except IntegrityError:
+                    errors['user_error'] = 'User already exists!'
+                except Exception as e:
+                    print e
+        else:
+            user_form = UserForm()
+        return render(request, 'survey/register.html', {'user_form': user_form, 'errors': errors, 'registered': registered})
+
+def login(request):
+    if request.META['USER']:
+        return HttpResponseRedirect('/survey')
+    else:
+        errors = {}
+        username = None
+        if request.POST:
+            username = request.POST['user']
+            password = request.POST['password']
+            user = authenticate(username=username, password=password)
+
+            if user:
+                login(request, user)
+                return HttpResponseRedirect('/survey')
+            else:
+                errors['bad_login'] = 'Invalid user or password!'
+        return render(request, 'survey/login.html', {'errors': errors, 'username': username})

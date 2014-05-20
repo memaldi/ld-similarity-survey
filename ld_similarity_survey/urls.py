@@ -12,4 +12,5 @@ urlpatterns = patterns('',
     url(r'^survey', 'survey.views.survey'),
     url(r'^about', 'survey.views.about'),
     url(r'^register', 'survey.views.register'),
+    url(r'^login', 'survey.views.login'),
 )
