@@ -1,7 +1,7 @@
 import redis
 from django.shortcuts import render
 from survey.forms import SurveyForm, UserForm
-from survey.models import Dataset, Similarity
+from survey.models import Dataset, Similarity, UserProfile
 from django.contrib.auth.models import User
 from random import randint
 from django.db.utils import IntegrityError
@@ -12,6 +12,7 @@ from django.contrib.auth.decorators import login_required
 
 @login_required
 def survey(request):
+    user = request.user
     if request.method == 'POST':
         form = SurveyForm(request.POST)
         if form.is_valid():
@@ -25,34 +26,43 @@ def survey(request):
             if len(similarity) < 3:
                 similarity = Similarity.objects.create(source_dataset=source_dataset, target_dataset=target_dataset, similarity=similarity_str)
                 similarity.save()
-                r = redis.StrictRedis(host='localhost', port=6379, db=0)
-                id_list = eval(r.get('ld-survey:id_list'))
-                id_list.remove((source_dataset.id, target_dataset.id))
-                r.set('ld-survey:id_list', str(id_list))
+                user.userprofile.rated_datasets.add(similarity)
             return render(request, 'survey/thanks.html')
 
     else:
         id_list = []
-        r = redis.StrictRedis(host='localhost', port=6379, db=0)
-        if r.exists('ld-survey:id_list'):
-            id_list = eval(r.get('ld-survey:id_list'))
-        else:
-            for source_dataset in Dataset.objects.all():
-                for target_dataset in Dataset.objects.all():
-                    if source_dataset.id != target_dataset.id and (source_dataset.id, target_dataset.id) not in id_list:
-                        similarity = Similarity.objects.filter(source_dataset=source_dataset, target_dataset=target_dataset)
-                        if len(similarity) < 3:
-                            id_list.append((source_dataset.id, target_dataset.id))
-            r.set('ld-survey:id_list', str(id_list))
-        random_id = randint(0, len(id_list) - 1)
-        source_id = id_list[random_id][0]
-        target_id = id_list[random_id][1]
-        source_dataset = Dataset.objects.get(id=source_id)
-        target_dataset = Dataset.objects.get(id=target_id)
+
+        selected_source_dataset = None
+        selected_target_dataset = None
+
+        found = False
+
+        for source_dataset in Dataset.objects.all():
+            if found:
+                break
+            for target_dataset in Dataset.objects.all():
+                if found:
+                    break
+                if source_dataset.id != target_dataset.id and (source_dataset.id, target_dataset.id) not in id_list:
+                    similarity = Similarity.objects.filter(source_dataset=source_dataset, target_dataset=target_dataset)
+                    if len(similarity) < 3:
+                        print source_dataset.id, target_dataset.id
+                        try:
+                            user_rating = user.userprofile.rated_datasets.get(source_dataset=source_dataset, target_dataset=target_dataset)
+                        except:
+                            user_rating = None
+                        print user_rating
+                        if user_rating == None:
+                            selected_source_dataset = source_dataset
+                            selected_target_dataset = target_dataset
+                            found = True
+
+        # source_dataset = Dataset.objects.get(id=source_id)
+        # target_dataset = Dataset.objects.get(id=target_id)
 
         form = SurveyForm(initial={'similarity': 'undefined'})
 
-        return render(request, 'survey/survey.html', {'form': form, 'source_dataset': source_dataset, 'target_dataset': target_dataset})
+        return render(request, 'survey/survey.html', {'form': form, 'source_dataset': selected_source_dataset, 'target_dataset': selected_target_dataset})
 
 def about(request):
     return render(request, 'survey/about.html')
@@ -78,6 +88,9 @@ def register(request):
                     user.username = username
                     user.set_password(password)
                     user.save()
+                    user_profile = UserProfile()
+                    user_profile.user = user
+                    user_profile.save()
                     user = authenticate(username=username,password=password)
                     registered = True
                     login(request, user)
