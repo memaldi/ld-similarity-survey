@@ -64,7 +64,6 @@ def register(request):
         errors = {}
         registered =  False
         if request.POST:
-            print request.POST
             username = request.POST['user']
             password = request.POST['password']
             repeat_password = request.POST['password-repeat']
@@ -80,8 +79,6 @@ def register(request):
                     user.set_password(password)
                     user.save()
                     user = authenticate(username=username,password=password)
-                    print username, password
-                    print user
                     registered = True
                     login(request, user)
                 except IntegrityError:
@@ -99,9 +96,7 @@ def user_login(request):
         if request.POST:
             username = request.POST['user']
             password = request.POST['password']
-            print username, password
             user = authenticate(username=username, password=password)
-            print user
             if user:
                 login(request, user)
                 return HttpResponseRedirect('/survey')

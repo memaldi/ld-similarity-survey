@@ -26,7 +26,7 @@
         </div>
         <div class="collapse navbar-collapse">
           <ul class="nav navbar-nav">
-            <li class="active"><a href="/survey">The Survey</a></li>
+            <li><a href="/survey">The Survey</a></li>
             <li><a href="/about">About</a></li>
         </ul>
     </div><!--/.nav-collapse -->
@@ -35,7 +35,8 @@
 
     <div class="container">
         <div class="starter-template">
-            <h1>Login</h1>
+            <h1>Sign in</h1>
+            <p>You must be logged in to participate in the survey. If you are not registered yet, you can sign up <a href="/register">here</a>.</p>
             <form id="login_form" method="post" action="/login/" class="form-horizontal">
                 {% csrf_token %}
                 <div class="form-group">

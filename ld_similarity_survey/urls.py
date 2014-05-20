@@ -8,7 +8,7 @@ urlpatterns = patterns('',
     # url(r'^$', 'ld_similarity_survey.views.home', name='home'),
     # url(r'^blog/', include('blog.urls')),
 
-    url(r'^admin/', include(admin.site.urls)),
+    url(r'^$', 'survey.views.survey'),
     url(r'^survey', 'survey.views.survey'),
     url(r'^about', 'survey.views.about'),
     url(r'^register', 'survey.views.register'),
