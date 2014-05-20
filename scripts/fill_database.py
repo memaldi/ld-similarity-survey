@@ -6,7 +6,7 @@ DATAHUB_API_URL = 'http://datahub.io/api/3'
 def get_id(url):
     return url.replace('http://datahub.io/dataset/', '').replace('\n', '')
 
-with open('survey_datasets.csv') as f:
+with open('survey_datasets.csv.min') as f:
     for line in f:
         sline = line.split(',')
         url = sline[1]

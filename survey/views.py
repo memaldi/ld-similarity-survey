@@ -5,10 +5,12 @@ from survey.models import Dataset, Similarity
 from django.contrib.auth.models import User
 from random import randint
 from django.db.utils import IntegrityError
-from django.contrib.auth import authenticate
+from django.contrib.auth import authenticate, login, logout
 from django.http import HttpResponseRedirect
+from django.contrib.auth.decorators import login_required
 # Create your views here.
 
+@login_required
 def survey(request):
     if request.method == 'POST':
         form = SurveyForm(request.POST)
@@ -56,7 +58,7 @@ def about(request):
     return render(request, 'survey/about.html')
 
 def register(request):
-    if request.META['USER']:
+    if request.user.is_authenticated():
         return HttpResponseRedirect('/survey')
     else:
         errors = {}
@@ -75,20 +77,21 @@ def register(request):
                 try:
                     user = User()
                     user.username = username
-                    user.password = password
+                    user.set_password(password)
                     user.save()
+                    user = authenticate(username=username,password=password)
+                    print username, password
+                    print user
                     registered = True
                     login(request, user)
                 except IntegrityError:
                     errors['user_error'] = 'User already exists!'
-                except Exception as e:
-                    print e
         else:
             user_form = UserForm()
         return render(request, 'survey/register.html', {'user_form': user_form, 'errors': errors, 'registered': registered})
 
-def login(request):
-    if request.META['USER']:
+def user_login(request):
+    if request.user.is_authenticated():
         return HttpResponseRedirect('/survey')
     else:
         errors = {}
@@ -96,11 +99,16 @@ def login(request):
         if request.POST:
             username = request.POST['user']
             password = request.POST['password']
+            print username, password
             user = authenticate(username=username, password=password)
-
+            print user
             if user:
                 login(request, user)
                 return HttpResponseRedirect('/survey')
             else:
                 errors['bad_login'] = 'Invalid user or password!'
         return render(request, 'survey/login.html', {'errors': errors, 'username': username})
+
+def user_logout(request):
+    logout(request)
+    return render(request, 'survey/thanks.html')
