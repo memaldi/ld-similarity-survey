@@ -1,8 +1,10 @@
 import redis
 from django.shortcuts import render
-from survey.forms import SurveyForm
+from survey.forms import SurveyForm, UserForm
 from survey.models import Dataset, Similarity
+from django.contrib.auth.models import User
 from random import randint
+from django.db.utils import IntegrityError
 # Create your views here.
 
 def survey(request):
@@ -50,3 +52,22 @@ def survey(request):
 
 def about(request):
     return render(request, 'survey/about.html')
+
+def register(request):
+    errors = {}
+    if request.POST:
+        username = request.POST['user']
+        password = request.POST['password']
+        try:
+            user = User()
+            user.username = username
+            user.password = password
+            user.save()
+        except IntegrityError:
+            user_form = UserForm(data={'username': username, 'username_error': 'Username already exists!'})
+            errors['user_error'] = 'User already exists!'
+        except Exception as e:
+            print e
+    else:
+        user_form = UserForm()
+    return render(request, 'survey/register.html', {'user_form': user_form, 'errors': errors})

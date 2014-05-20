@@ -11,4 +11,5 @@ urlpatterns = patterns('',
     url(r'^admin/', include(admin.site.urls)),
     url(r'^survey', 'survey.views.survey'),
     url(r'^about', 'survey.views.about'),
+    url(r'^register', 'survey.views.register'),
 )

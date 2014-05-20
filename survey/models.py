@@ -1,4 +1,5 @@
 from django.db import models
+from django.contrib.auth.models import User
 
 # Create your models here.
 
@@ -18,3 +19,7 @@ class Similarity(models.Model):
         ('undefined', 'Undefined'),
         )
     similarity = models.CharField(max_length=10, choices=choices, default='undefined')
+
+class UserProfile(models.Model):
+    user = models.OneToOneField(User)
+    rated_datasets = models.ManyToManyField(Similarity)
