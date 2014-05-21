@@ -2,6 +2,9 @@ from django.test import TestCase, TransactionTestCase
 from django.test.client import Client
 from django.contrib.auth.models import User
 from survey.models import Dataset, Similarity
+from random import randint
+from scripts import kappa
+
 # Create your tests here.
 class UserTestCase(TransactionTestCase):
     def test_user(self):
@@ -132,3 +135,36 @@ class RankingTestCase(TransactionTestCase):
             user_list[user_profile.user.username] = user_profile.points
 
         self.assertTrue(user_list == {'user0': 4, 'user1': 3, 'user2': 2, 'user3': 1})
+
+class KappaTestCase(TestCase):
+
+    def setUp(self):
+
+        OPTIONS = ['yes', 'no', 'undefined']
+
+        for i in range(4):
+            c = Client()
+            c.post('/register/', {'user': 'user%s' % i, 'password': 'user%s' % i, 'password-repeat': 'user%s' % i})
+        for i in range(5):
+            d = Dataset()
+            d.save()
+        for user in User.objects.all():
+            c = Client()
+            c.post('/login/', {'user': user.username, 'password': user.username})
+            end = False
+            while not end:
+                request = c.get('/survey')
+                source_dataset = request.context['source_dataset']
+                if source_dataset == None:
+                    break
+                target_dataset = request.context['target_dataset']
+                sim = Similarity.objects.filter(source_dataset=source_dataset, target_dataset=target_dataset)
+                try:
+                    user_rating = user.userprofile.rated_datasets.get(source_dataset=source_dataset, target_dataset=target_dataset)
+                except:
+                    user_rating = None
+                similarity_value = OPTIONS[randint(0,2)]
+                c.post('/survey', {'source_dataset_id': source_dataset.id, 'target_dataset_id': target_dataset.id, 'similarity': similarity_value})
+
+    def test_kappa(self):
+        kappa_value, pi_values = kappa.kappa()
