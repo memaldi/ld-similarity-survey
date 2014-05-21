@@ -1,10 +1,8 @@
-import redis
 import itertools
 from django.shortcuts import render
 from survey.forms import SurveyForm, UserForm
 from survey.models import Dataset, Similarity, UserProfile
 from django.contrib.auth.models import User
-from random import randint
 from django.db.utils import IntegrityError
 from django.contrib.auth import authenticate, login, logout
 from django.http import HttpResponseRedirect
@@ -34,8 +32,6 @@ def survey(request):
 
     selected_source_dataset = None
     selected_target_dataset = None
-
-    found = False
 
     combinations = itertools.combinations(Dataset.objects.all(), 2)
 
