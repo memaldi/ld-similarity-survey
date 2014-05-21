@@ -43,7 +43,6 @@ def survey(request):
             except:
                 user_rating = None
             if user_rating == None:
-                print user_rating
                 selected_source_dataset = source_dataset
                 selected_target_dataset = target_dataset
                 break
