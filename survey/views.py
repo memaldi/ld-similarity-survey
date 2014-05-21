@@ -115,3 +115,9 @@ def user_login(request):
 def user_logout(request):
     logout(request)
     return render(request, 'survey/thanks.html')
+
+def ranking(request):
+
+    user_profiles = UserProfile.objects.filter(points__gt=0).order_by('-points')
+
+    return render(request, 'survey/ranking.html', {'user_profiles': user_profiles})
