@@ -59,7 +59,7 @@ class RatingTestCase(TransactionTestCase):
         for i in range(4):
             c = Client()
             c.post('/register/', {'user': 'user%s' % i, 'password': 'user%s' % i, 'password-repeat': 'user%s' % i})
-        for i in range(10):
+        for i in range(5):
             d = Dataset()
             d.save()
 
@@ -83,3 +83,52 @@ class RatingTestCase(TransactionTestCase):
                     user_rating = None
                 self.assertEqual(user_rating, None)
                 c.post('/survey', {'source_dataset_id': source_dataset.id, 'target_dataset_id': target_dataset.id, 'similarity': 'yes'})
+
+class RankingTestCase(TransactionTestCase):
+    def setUp(self):
+        for i in range(4):
+            c = Client()
+            c.post('/register/', {'user': 'user%s' % i, 'password': 'user%s' % i, 'password-repeat': 'user%s' % i})
+        for i in range(5):
+            d = Dataset()
+            d.save()
+
+    def test_ranking(self):
+        c = Client()
+        c.post('/login/', {'user': 'user0', 'password': 'user0'})
+        for i in range(4):
+            request = c.get('/survey')
+            source_dataset = request.context['source_dataset']
+            target_dataset = request.context['target_dataset']
+            c.post('/survey', {'source_dataset_id': source_dataset.id, 'target_dataset_id': target_dataset.id, 'similarity': 'yes'})
+
+        c = Client()
+        c.post('/login/', {'user': 'user1', 'password': 'user1'})
+        for i in range(3):
+            request = c.get('/survey')
+            source_dataset = request.context['source_dataset']
+            target_dataset = request.context['target_dataset']
+            c.post('/survey', {'source_dataset_id': source_dataset.id, 'target_dataset_id': target_dataset.id, 'similarity': 'yes'})
+
+        c = Client()
+        c.post('/login/', {'user': 'user2', 'password': 'user2'})
+        for i in range(2):
+            request = c.get('/survey')
+            source_dataset = request.context['source_dataset']
+            target_dataset = request.context['target_dataset']
+            c.post('/survey', {'source_dataset_id': source_dataset.id, 'target_dataset_id': target_dataset.id, 'similarity': 'yes'})
+
+        c = Client()
+        c.post('/login/', {'user': 'user3', 'password': 'user3'})
+        for i in range(1):
+            request = c.get('/survey')
+            source_dataset = request.context['source_dataset']
+            target_dataset = request.context['target_dataset']
+            c.post('/survey', {'source_dataset_id': source_dataset.id, 'target_dataset_id': target_dataset.id, 'similarity': 'yes'})
+
+        request = c.get('/ranking/')
+        user_list = {}
+        for user_profile in request.context['user_profiles']:
+            user_list[user_profile.user.username] = user_profile.points
+
+        self.assertTrue(user_list == {'user0': 4, 'user1': 3, 'user2': 2, 'user3': 1})
