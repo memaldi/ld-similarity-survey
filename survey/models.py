@@ -23,3 +23,4 @@ class Similarity(models.Model):
 class UserProfile(models.Model):
     user = models.OneToOneField(User)
     rated_datasets = models.ManyToManyField(Similarity)
+    points = models.IntegerField()

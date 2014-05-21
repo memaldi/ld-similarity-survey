@@ -28,7 +28,9 @@ def survey(request):
             if len(similarity) < 3:
                 similarity = Similarity.objects.create(source_dataset=source_dataset, target_dataset=target_dataset, similarity=similarity_str)
                 similarity.save()
+                user.userprofile.points = user.userprofile.points + 1;
                 user.userprofile.rated_datasets.add(similarity)
+                user.userprofile.save()
 
     selected_source_dataset = None
     selected_target_dataset = None
@@ -52,7 +54,9 @@ def survey(request):
 
     form = SurveyForm(initial={'similarity': 'undefined'})
 
-    return render(request, 'survey/survey.html', {'form': form, 'source_dataset': selected_source_dataset, 'target_dataset': selected_target_dataset})
+    top_users = UserProfile.objects.filter(points__gt=0).order_by('-points')[:5]
+
+    return render(request, 'survey/survey.html', {'form': form, 'source_dataset': selected_source_dataset, 'target_dataset': selected_target_dataset, 'top_users': top_users})
 
 def about(request):
     return render(request, 'survey/about.html')
@@ -80,6 +84,7 @@ def register(request):
                     user.save()
                     user_profile = UserProfile()
                     user_profile.user = user
+                    user_profile.points = 0
                     user_profile.save()
                     user = authenticate(username=username,password=password)
                     registered = True
