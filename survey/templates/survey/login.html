@@ -28,9 +28,9 @@
         </div>
         <div class="collapse navbar-collapse">
           <ul class="nav navbar-nav">
-            <li><a href="/survey">The Survey</a></li>
-            <li><a href="/ranking">Ranking</a></li>
-            <li><a href="/about">About</a></li>
+            <li><a href="{% url 'survey.views.survey' %}">The Survey</a></li>
+            <li><a href="{% url 'survey.views.ranking' %}">Ranking</a></li>
+            <li><a href="{% url 'survey.views.about' %}">About</a></li>
         </ul>
     </div><!--/.nav-collapse -->
     </div>
@@ -39,7 +39,7 @@
     <div class="container">
         <div class="starter-template">
             <h1>Sign in</h1>
-            <p>You must be logged in to participate in the survey. If you are not registered yet, you can sign up <a href="/register">here</a>.</p>
+            <p>You must be logged in to participate in the survey. If you are not registered yet, you can sign up <a href="{% url 'survey.views.register' %}">here</a>.</p>
             <form id="login_form" method="post" action="/login/" class="form-horizontal">
                 {% csrf_token %}
                 <div class="form-group">
@@ -70,6 +70,6 @@
     <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
     <!-- Include all compiled plugins (below), or include individual files as needed -->
-    <script src="{% static "static/js/bootstrap.min.js" %}"></script>
+    <script src="{% static "js/bootstrap.min.js" %}"></script>
     </body>
 </html>

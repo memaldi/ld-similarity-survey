@@ -30,11 +30,11 @@
         </div>
         <div class="collapse navbar-collapse">
             <ul class="nav navbar-nav">
-                <li class="active"><a href="/survey">The Survey</a></li>
-                <li><a href="/ranking">Ranking</a></li>
-                <li><a href="/about">About</a></li>
+                <li class="active"><a href="{% url 'survey.views.survey' %}">The Survey</a></li>
+                <li><a href="{% url 'survey.views.ranking' %}">Ranking</a></li>
+                <li><a href="{% url 'survey.views.about' %}">About</a></li>
                 <li><a>You are logged as {{user.username}}</a></li>
-                <li><a href="/logout">Logout</a></li>
+                <li><a href="{% url 'survey.views.user_logout' %}">Logout</a></li>
             </ul>
         </div><!--/.nav-collapse -->
     </div>
@@ -49,7 +49,7 @@
                             <li><b>{{item.user.username}} ({{item.points}})</b></li>
                        {% endfor %}
                     </ol>
-                    <p><a href="/ranking">Full ranking</a></p>
+                    <p><a href="{% url 'survey.views.ranking' %}">Full ranking</a></p>
                 </div>
             </div>
         </div>
@@ -105,6 +105,6 @@
     <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
     <!-- Include all compiled plugins (below), or include individual files as needed -->
-    <script src="{% static "static/js/bootstrap.min.js" %}"></script>
+    <script src="{% static "js/bootstrap.min.js" %}"></script>
     </body>
 </html>
