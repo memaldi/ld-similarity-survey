@@ -4,9 +4,9 @@ from django.contrib.auth.models import User
 # Create your models here.
 
 class Dataset(models.Model):
-    title = models.CharField(max_length=20)
+    title = models.CharField(max_length=200)
     description = models.CharField(max_length=1000)
-    datahub_url = models.CharField(max_length=20)
+    datahub_url = models.CharField(max_length=200)
     example_resource = models.CharField(max_length=100)
     similarity = models.ManyToManyField("self", through='Similarity', symmetrical=False)
 
