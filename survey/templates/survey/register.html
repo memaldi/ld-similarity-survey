@@ -50,7 +50,7 @@
             <h2>Thank you for registering, you can <a href="/survey">start the survey</a> now!</h2>
             {% else %}
                 <h1>Sign up</h1>
-                <form id="user_form" method="post" action="/register/" class="form-horizontal">
+                <form id="user_form" method="post" action="{% url 'survey.views.register' %}" class="form-horizontal">
                     {% csrf_token %}
                     <div class="form-group {% if errors.user_error %} has-error {% endif %}">
                         <label for="user" class="col-sm-5 control-label">Username</label>

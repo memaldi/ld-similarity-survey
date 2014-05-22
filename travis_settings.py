@@ -14,3 +14,5 @@ DATABASES = {
 }
 
 STATIC_URL = '/static/'
+
+LOGIN_URL='/login'
