@@ -4,20 +4,6 @@ import itertools
 def kappa():
     combinations = itertools.combinations(Dataset.objects.all(), 2)
     sum_cells = 0
-    n = 0
-    # user_list = []
-    # for source_dataset, target_dataset in combinations:
-    #     try:
-    #         sim_list = Similarity.objects.filter(source_dataset=source_dataset, target_dataset=target_dataset)
-    #         if len(sim_list) >= 3:
-    #             sum_cells += 3
-    #             for sim in sim_list:
-    #                 for user_profile in sim.userprofile_set.all():
-    #                     if user_profile.user.username not in user_list:
-    #                         user_list.append(user_profile.user.username)
-    #     except Exception as e:
-    #         print e
-
     n = 3
     N = 0
     P = 0
