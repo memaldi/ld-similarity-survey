@@ -7,6 +7,7 @@ from django.db.utils import IntegrityError
 from django.contrib.auth import authenticate, login, logout
 from django.http import HttpResponseRedirect
 from django.contrib.auth.decorators import login_required
+from django.core.urlresolvers import reverse
 # Create your views here.
 
 @login_required
