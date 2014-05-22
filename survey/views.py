@@ -58,7 +58,7 @@ def about(request):
 
 def register(request):
     if request.user.is_authenticated():
-        return HttpResponseRedirect('/survey')
+        return HttpResponseRedirect(reverse('survey.views.survey'))
     else:
         errors = {}
         registered =  False
@@ -92,7 +92,7 @@ def register(request):
 
 def user_login(request):
     if request.user.is_authenticated():
-        return HttpResponseRedirect('/survey')
+        return HttpResponseRedirect(reverse('survey.views.survey'))
     else:
         errors = {}
         username = None
@@ -102,7 +102,7 @@ def user_login(request):
             user = authenticate(username=username, password=password)
             if user:
                 login(request, user)
-                return HttpResponseRedirect('/survey')
+                return HttpResponseRedirect(reverse('survey.views.survey')
             else:
                 errors['bad_login'] = 'Invalid user or password!'
         return render(request, 'survey/login.html', {'errors': errors, 'username': username})
