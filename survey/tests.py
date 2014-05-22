@@ -139,10 +139,7 @@ class RankingTestCase(TransactionTestCase):
 class KappaTestCase(TestCase):
 
     def setUp(self):
-
         OPTIONS = ['yes', 'no', 'undefined']
-
-        option_list = []
 
         for i in range(4):
             c = Client()
@@ -166,8 +163,7 @@ class KappaTestCase(TestCase):
                     user_rating = user.userprofile.rated_datasets.get(source_dataset=source_dataset, target_dataset=target_dataset)
                 except:
                     user_rating = None
-                #similarity_value = OPTIONS[randint(0,2)]
-                similarity_value = option_list[i]
+                similarity_value = OPTIONS[randint(0,2)]
                 i += 1
                 c.post('/survey', {'source_dataset_id': source_dataset.id, 'target_dataset_id': target_dataset.id, 'similarity': similarity_value})
 
