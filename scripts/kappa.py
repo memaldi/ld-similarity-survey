@@ -39,7 +39,6 @@ def kappa():
                     accum += pow(sim_dict[key], 2)
                 accum = accum - n
                 pi = float(1) / (n * (n - 1)) * accum
-                print pi
                 P += pi
         except Exception as e:
             print e
@@ -51,5 +50,4 @@ def kappa():
         kappa_value = 1
     else:
         kappa_value = float(P - Pe) / (1 - Pe)
-    print kappa_value
-    return None, None
+    return kappa_value, None

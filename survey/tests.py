@@ -142,12 +142,15 @@ class KappaTestCase(TestCase):
 
         OPTIONS = ['yes', 'no', 'undefined']
 
+        option_list = []
+
         for i in range(4):
             c = Client()
             c.post('/register/', {'user': 'user%s' % i, 'password': 'user%s' % i, 'password-repeat': 'user%s' % i})
         for i in range(5):
             d = Dataset()
             d.save()
+        i = 0
         for user in User.objects.all():
             c = Client()
             c.post('/login/', {'user': user.username, 'password': user.username})
@@ -163,8 +166,11 @@ class KappaTestCase(TestCase):
                     user_rating = user.userprofile.rated_datasets.get(source_dataset=source_dataset, target_dataset=target_dataset)
                 except:
                     user_rating = None
-                similarity_value = OPTIONS[randint(0,2)]
+                #similarity_value = OPTIONS[randint(0,2)]
+                similarity_value = option_list[i]
+                i += 1
                 c.post('/survey', {'source_dataset_id': source_dataset.id, 'target_dataset_id': target_dataset.id, 'similarity': similarity_value})
 
     def test_kappa(self):
         kappa_value, pi_values = kappa.kappa()
+        self.assertTrue(-1 <= kappa_value <= 1)
