@@ -40,7 +40,7 @@
         <div class="starter-template">
             <h1>Sign in</h1>
             <p>You must be logged in to participate in the survey. If you are not registered yet, you can sign up <a href="{% url 'survey.views.register' %}">here</a>.</p>
-            <form id="login_form" method="post" action="{% url 'survey.views.login' %}" class="form-horizontal">
+            <form id="login_form" method="post" action="{% url 'survey.views.user_login' %}" class="form-horizontal">
                 {% csrf_token %}
                 <div class="form-group">
                     <label for="user" class="col-sm-5 control-label">Username</label>
