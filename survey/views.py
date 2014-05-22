@@ -102,7 +102,7 @@ def user_login(request):
             user = authenticate(username=username, password=password)
             if user:
                 login(request, user)
-                return HttpResponseRedirect(reverse('survey.views.survey')
+                return HttpResponseRedirect(reverse('survey.views.survey'))
             else:
                 errors['bad_login'] = 'Invalid user or password!'
         return render(request, 'survey/login.html', {'errors': errors, 'username': username})
