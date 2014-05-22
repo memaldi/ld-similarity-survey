@@ -7,6 +7,7 @@ def kappa():
     n = 3
     N = 0
     P = 0
+    pi_dict = {}
     total_sim = {'yes': 0, 'no': 0, 'undefined': 0}
     combinations = itertools.combinations(Dataset.objects.all(), 2)
     for source_dataset, target_dataset in combinations:
@@ -24,6 +25,7 @@ def kappa():
                     accum += pow(sim_dict[key], 2)
                 accum = accum - n
                 pi = float(1) / (n * (n - 1)) * accum
+                pi_dict[(source_dataset, target_dataset)] = pi
                 P += pi
         except Exception as e:
             print e
@@ -35,4 +37,4 @@ def kappa():
         kappa_value = 1
     else:
         kappa_value = float(P - Pe) / (1 - Pe)
-    return kappa_value, None
+    return kappa_value, pi_dict
