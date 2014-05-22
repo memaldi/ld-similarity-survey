@@ -20,7 +20,6 @@ def kappa():
                     sim_dict[sim.similarity] += 1
                     total_sim[sim.similarity] += 1
                 accum = 0
-                print sim_dict
                 for key in sim_dict:
                     accum += pow(sim_dict[key], 2)
                 accum = accum - n
