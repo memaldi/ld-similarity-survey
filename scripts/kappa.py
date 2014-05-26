@@ -76,7 +76,7 @@ def cohens_kappa(user1, user2):
                 if sim1.similarity == sim2.similarity:
                     agreement += 1
                 total += 1
-    if total > 0
+    if total > 0:
         pr_a = float(agreement) / total
         pr_e = (float(user1_yes)/total * float(user2_yes)/total) + (float(user1_no/total) * float(user2_no/total)) + (float(user1_undefined/total) * float(user2_undefined/total))
         k = (pr_a - pr_e) / (1 - pr_e)
