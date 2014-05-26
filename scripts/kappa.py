@@ -1,4 +1,5 @@
 from survey.models import Similarity, Dataset
+from django.contrib.auth.models import User
 import itertools
 
 def kappa():
@@ -38,3 +39,44 @@ def kappa():
     else:
         kappa_value = float(P - Pe) / (1 - Pe)
     return kappa_value, pi_dict
+
+def cohens_kappa(user1, user2):
+
+    user_profile1 = user1.userprofile
+    user_profile2 = user2.userprofile
+    sim_user1 = user1.userprofile.rated_datasets.all()
+    sim_user2 = user2.userprofile.rated_datasets.all()
+
+    user1_yes = 0
+    user2_yes = 0
+    user1_no = 0
+    user2_no = 0
+    user1_undefined = 0
+    user2_undefined = 0
+    agreement = 0
+    total = 0
+
+    for sim1 in sim_user1:
+        for sim2 in sim_user2:
+            if (sim1.source_dataset == sim2.source_dataset) and (sim1.target_dataset == sim2.target_dataset):
+                if sim1.similarity == 'yes':
+                    user1_yes += 1
+                elif sim1.similarity == 'no':
+                    user1_no += 1
+                else:
+                    user1_undefined += 1
+
+                if sim2.similarity == 'yes':
+                    user2_yes += 1
+                elif sim2.similarity == 'no':
+                    user2_no += 1
+                else:
+                    user2_undefined += 1
+
+                if sim1.similarity == sim2.similarity:
+                    agreement += 1
+                total += 1
+    pr_a = float(agreement) / total
+    pr_e = (float(user1_yes)/total * float(user2_yes)/total) + (float(user1_no/total) * float(user2_no/total)) + (float(user1_undefined/total) * float(user2_undefined/total))
+    k = (pr_a - pr_e) / (1 - pr_e)
+    print k
