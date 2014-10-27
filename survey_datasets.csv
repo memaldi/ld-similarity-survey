@@ -1,126 +1,160 @@
-Hedatuz,http://datahub.io/dataset/hedatuz
-ACM,http://datahub.io/dataset/rkb-explorer-acm
-DBLP,http://datahub.io/dataset/rkb-explorer-dblp
-AEMET,http://datahub.io/dataset/aemet
-Budapest,http://datahub.io/dataset/rkb-explorer-budapest
-Citeseer,http://datahub.io/dataset/rkb-explorer-citeseer
-Courseware,http://datahub.io/dataset/rkb-explorer-courseware
-LCSH,http://datahub.io/dataset/lcsh
-PSH,http://datahub.io/dataset/psh-subject-headings
-LinkedGeoData,http://datahub.io/dataset/linkedgeodata
-DailyMed,http://datahub.io/dataset/fu-berlin-dailymed
-DrugBank,http://datahub.io/dataset/bio2rdf-drugbank
-TCM,http://datahub.io/dataset/tcmgenedit_dataset
-Colinda,http://datahub.io/dataset/colinda
-Corruption Perception Index,http://datahub.io/dataset/transparency-linked-data
-NDLSH,http://datahub.io/dataset/national-diet-library-subject-headings
-Newcastle,http://datahub.io/dataset/rkb-explorer-newcastle
-OAI Similarity,http://datahub.io/dataset/core
-OSM Semantic Network,http://datahub.io/dataset/osm-semantic-network
-Yovisto,http://datahub.io/dataset/yovisto
-edustats,http://datahub.io/dataset/education-data-gov-uk
-OntosNews,http://datahub.io/dataset/ontos-news-portal
-Lexvo,http://datahub.io/dataset/lexvo
-Cordis,http://datahub.io/dataset/rkb-explorer-cordis
-SDG,http://datahub.io/dataset/semantic-web-dog-food
-NTNU,http://datahub.io/dataset/ntnusc
-lingvoj,http://datahub.io/dataset/lingvoj
-lov,http://datahub.io/dataset/linked-open-vocabularies-lov
-omim,http://datahub.io/dataset/bio2rdf-omim
-interpro,http://datahub.io/dataset/bio2rdf-interpro
-hgnc,http://datahub.io/dataset/bio2rdf-hgnc
-homologene,http://datahub.io/dataset/bio2rdf-homologene
-nyt,http://datahub.io/dataset/nytimes-linked-open-data
-fao,http://datahub.io/dataset/fao-linked-data
-reegle,http://datahub.io/dataset/clean-energy-data-reegle
-thesesfr,http://datahub.io/dataset/thesesfr
-police,http://datahub.io/dataset/hellenic-police
-fire,http://datahub.io/dataset/hellenic-fire-brigade
-telegraphis,http://datahub.io/dataset/telegraphis
-archiveshub,http://datahub.io/dataset/archiveshub-linkeddata
-semanticweb,http://datahub.io/dataset/semanticweb-org
-dcs,http://datahub.io/dataset/dcs-sheffield
-eu-institutions,http://datahub.io/dataset/eu-institutions
-lem,http://datahub.io/dataset/lista-encabezamientos-materia
-ddc,http://datahub.io/dataset/dewey_decimal_classification
-geolinkeddata,http://datahub.io/dataset/geolinkeddata
-finnish-municipalities,http://datahub.io/dataset/finnish-municipalities
-earth,http://datahub.io/dataset/environmental-applications-reference-thesaurus
-linkedmdb,http://datahub.io/dataset/linkedmdb
-nvd,http://datahub.io/dataset/nvd
-klapp,http://datahub.io/dataset/klappstuhlclub
-gba,http://datahub.io/dataset/geological-survey-of-austria-thesaurus
-court,http://datahub.io/dataset/courts-thesaurus
-german-labour,http://datahub.io/dataset/german-labor-law-thesaurus
-jamendo,http://datahub.io/dataset/jamendo-dbtune
-peel,http://datahub.io/dataset/dbtune-john-peel-sessions
-stw,http://datahub.io/dataset/stw-thesaurus-for-economics
-iserve,http://datahub.io/dataset/iserve
-rae2001,http://datahub.io/dataset/rkb-explorer-rae2001
-irit,http://datahub.io/dataset/rkb-explorer-irit
-ulm,http://datahub.io/dataset/rkb-explorer-ulm
-ft,http://datahub.io/dataset/rkb-explorer-ft
-esoteric,http://datahub.io/dataset/temple-ov-thee-lemur-datasets
-era,http://datahub.io/dataset/rkb-explorer-era
-risk,http://datahub.io/dataset/rkb-explorer-risks
-deploy,http://datahub.io/dataset/rkb-explorer-deploy
-deepblue,http://datahub.io/dataset/rkb-explorer-deepblue
-southampton,http://datahub.io/dataset/rkb-explorer-southampton
-nsf,http://datahub.io/dataset/rkb-explorer-nsf
-ibm,http://datahub.io/dataset/rkb-explorer-ibm
-eurecom,http://datahub.io/dataset/rkb-explorer-eurecom
-roma,http://datahub.io/dataset/rkb-explorer-roma
-curriculum,http://datahub.io/dataset/rkb-explorer-curriculum
-os,http://datahub.io/dataset/rkb-explorer-os
-unlocode,http://datahub.io/dataset/rkb-explorer-unlocode
-darmstadt,http://datahub.io/dataset/rkb-explorer-darmstadt
-pisa,http://datahub.io/dataset/rkb-explorer-pisa
-jisc,http://datahub.io/dataset/rkb-explorer-jisc
-wiki,http://datahub.io/dataset/rkb-explorer-wiki
-ieee,http://datahub.io/dataset/rkb-explorer-ieee
-eunis,http://datahub.io/dataset/eunis
-enipedia,http://datahub.io/dataset/enipedia
-cnr,http://datahub.io/dataset/data-cnr-it
-indiana,http://datahub.io/dataset/vivo-indiana-university
-crime,http://datahub.io/dataset/rkb-explorer-crime
-gtaa,http://datahub.io/dataset/gemeenschappelijke-thesaurus-audiovisuele-archieven
-sec,http://datahub.io/dataset/sec-rdfabout
-elviajero,http://datahub.io/dataset/elviajero
-educational-program,http://datahub.io/dataset/educationalprograms_sisvu
-geospecies,http://datahub.io/dataset/geospecies
-pleiades,http://datahub.io/dataset/pleiades
-core,http://datahub.io/dataset/core
-bfs,http://datahub.io/dataset/bfs-linked-data
-eurostats,http://datahub.io/dataset/the-eurostat-linked-data
-w3c-wordnet,http://datahub.io/dataset/w3c-wordnet
-dotac,http://datahub.io/dataset/rkb-explorer-dotac
-eprints,http://datahub.io/dataset/rkb-explorer-eprints
-sider,http://datahub.io/dataset/fu-berlin-sider
-medicare,http://datahub.io/dataset/fu-berlin-medicare
-sgd,http://datahub.io/dataset/bio2rdf-sgd
-pdb,http://datahub.io/dataset/bio2rdf-pdb
-genbank,http://datahub.io/dataset/bio2rdf-genbank
-mgi,http://datahub.io/dataset/bio2rdf-mgi
-pubmed,http://datahub.io/dataset/bio2rdf-pubmed
-kegg,http://datahub.io/dataset/bio2rdf-kegg-pathway
-gutenberg,http://datahub.io/dataset/fu-berlin-project-gutenberg
-factbook,http://datahub.io/dataset/world-factbook-fu-berlin
-oceandrilling,http://datahub.io/dataset/oceandrilling-codices
-britishmuseum,http://datahub.io/dataset/british-museum-collection
-chembl,http://datahub.io/dataset/farmbio-chembl
-thesoz,http://datahub.io/dataset/gesis-thesoz
-oai,http://datahub.io/dataset/rkb-explorer-oai
-kisti,http://datahub.io/dataset/rkb-explorer-kisti
-resex,http://datahub.io/dataset/rkb-explorer-resex
-wordnet_rkb,http://datahub.io/dataset/rkb-explorer-wordnet
-oxpoints,http://datahub.io/dataset/oxpoints
-lod_ecology,http://datahub.io/dataset/linked-open-data-of-ecology
-feedback,http://datahub.io/dataset/linked-user-feedback
-lichfield,http://datahub.io/dataset/lichfield-spending
-morelab,http://datahub.io/dataset/morelab
-open_energy,http://datahub.io/dataset/open-energy-info-wiki
-nszl,http://datahub.io/dataset/hungarian-national-library-catalog
-sztaki,http://datahub.io/dataset/sztaki-lod
-eea,http://datahub.io/dataset/eea
-musicbrainz,http://datahub.io/dataset/dbtune-musicbrainz
-open_ac_uk,http://datahub.io/dataset/data-open-ac-uk
+,,SUBDUE FILE,SUBGRAPH,NAME,COMENTARIOS
+ACM,http://datahub.io/dataset/rkb-explorer-acm,,,acm,Está con el método viejo pero sirve para hacer pruebas
+AEMET,http://datahub.io/dataset/aemet,,,aemet,
+amsterdam-museum-as-edm-lod,http://datahub.io/dataset/amsterdam-museum-as-edm-lod,,,amsterdam,
+archiveshub,http://datahub.io/dataset/archiveshub-linkeddata,,,archiveshub,No se puede almacenar un string de 7652 chars en Jena
+b3kat,http://datahub.io/dataset/b3kat,,,*,
+bfs,http://datahub.io/dataset/bfs-linked-data,,,bfs,
+bio2rdf-goa,http://datahub.io/dataset/bio2rdf-goa,,,*,
+bio2rdf-ncbigene,http://datahub.io/dataset/bio2rdf-ncbigene,,,*,
+bluk-bnb,http://datahub.io/dataset/bluk-bnb,,,*,
+britishmuseum,http://datahub.io/dataset/british-museum-collection,,,,"ocupa una burrada y además no tiene enlaces en datahub, yo lo excluía"
+Budapest,http://datahub.io/dataset/rkb-explorer-budapest,,,budapest,
+chem2bio2rdf,http://datahub.io/dataset/chem2bio2rdf,,,*,
+chembl,http://datahub.io/dataset/farmbio-chembl,,,*,hay entrar en lo de dataverse oeso
+Citeseer,http://datahub.io/dataset/rkb-explorer-citeseer,,,citeseer,
+cnr,http://datahub.io/dataset/data-cnr-it,,,cnr,
+Colinda,http://datahub.io/dataset/colinda,,,colinda,
+Cordis,http://datahub.io/dataset/rkb-explorer-cordis,,,cordis,
+Corruption Perception Index,http://datahub.io/dataset/transparency-linked-data,,,corruption,
+Courseware,http://datahub.io/dataset/rkb-explorer-courseware,,,courseware,
+court,http://datahub.io/dataset/courts-thesaurus,,,court,
+crime,http://datahub.io/dataset/rkb-explorer-crime,,,crime,
+curriculum,http://datahub.io/dataset/rkb-explorer-curriculum,,,curriculum,
+DailyMed,http://datahub.io/dataset/fu-berlin-dailymed,,,,el volcado está caído y va sobre d2r. Muerte
+darmstadt,http://datahub.io/dataset/rkb-explorer-darmstadt,,,darmstadt,
+datos-bne-es,http://datahub.io/dataset/datos-bne-es,,,*,
+DBLP,http://datahub.io/dataset/rkb-explorer-dblp,,,dblp,
+dbtropes,http://datahub.io/dataset/dbtropes,,,*,
+dcs,http://datahub.io/dataset/dcs-sheffield,,,dcs,
+ddc,http://datahub.io/dataset/dewey_decimal_classification,,,ddc,
+deepblue,http://datahub.io/dataset/rkb-explorer-deepblue,,,deepblue,
+deploy,http://datahub.io/dataset/rkb-explorer-deploy,,,deploy,
+dnb-gemeinsame-normdatei,http://datahub.io/dataset/dnb-gemeinsame-normdatei,,,*,
+dotac,http://datahub.io/dataset/rkb-explorer-dotac,,,dotac,el dump está vacío
+DrugBank,http://datahub.io/dataset/bio2rdf-drugbank,,,*,
+earth,http://datahub.io/dataset/environmental-applications-reference-thesaurus,,,earth,
+educational-program,http://datahub.io/dataset/educationalprograms_sisvu,,,educational-program,
+edustats,http://datahub.io/dataset/education-data-gov-uk,,,edustats,
+eea,http://datahub.io/dataset/eea,,,,no tiene dump y tampoco tiene enlaces
+elviajero,http://datahub.io/dataset/elviajero,,,elviajero,
+enipedia,http://datahub.io/dataset/enipedia,,,enipedia,
+eprints,http://datahub.io/dataset/rkb-explorer-eprints,,,,no tiene dump pero tiene un montón de enlaces
+era,http://datahub.io/dataset/rkb-explorer-era,,,era,las instancias no tienen tipo alguno ¬¬'
+esoteric,http://datahub.io/dataset/temple-ov-thee-lemur-datasets,,,esoteric,
+eu-institutions,http://datahub.io/dataset/eu-institutions,,,eu-institutions,
+eunis,http://datahub.io/dataset/eunis,,,eunis,
+eurecom,http://datahub.io/dataset/rkb-explorer-eurecom,,,eurecom,
+europeana-lod,http://datahub.io/dataset/europeana-lod,,,*,
+eurostat-rdf,http://datahub.io/dataset/eurostat-rdf,,,*,
+eurostats,http://datahub.io/dataset/the-eurostat-linked-data,,,eurostats,
+event-media,http://datahub.io/dataset/event-media,,,*,
+factbook,http://datahub.io/dataset/world-factbook-fu-berlin,,,,ni enlaces ni dump
+fao,http://datahub.io/dataset/fao-linked-data,,,fao,
+farmers-markets-geographic-data-united-states,http://datahub.io/dataset/farmers-markets-geographic-data-united-states,,,*,
+feedback,http://datahub.io/dataset/linked-user-feedback,,,,el dump está caído
+finnish-municipalities,http://datahub.io/dataset/finnish-municipalities,,,finnish-municipalities,
+fire,http://datahub.io/dataset/hellenic-fire-brigade,,,fire,
+ft,http://datahub.io/dataset/rkb-explorer-ft,,,ft,
+gba,http://datahub.io/dataset/geological-survey-of-austria-thesaurus,,,gba,
+gemet,http://datahub.io/dataset/gemet,,,gemet,
+genbank,http://datahub.io/dataset/bio2rdf-genbank,,,,ni dump ni enlaces
+geolinkeddata,http://datahub.io/dataset/geolinkeddata,,,geolinkeddata,
+geonames-semantic-web,http://datahub.io/dataset/geonames-semantic-web,,,*,
+geospecies,http://datahub.io/dataset/geospecies,,,geospecies,
+geowordnet,http://datahub.io/dataset/geowordnet,,,*,
+german-labour,http://datahub.io/dataset/german-labor-law-thesaurus,,,german-labour,
+government-web-integration-for-linked-data,http://datahub.io/dataset/government-web-integration-for-linked-data,,,*,
+govtrack,http://datahub.io/dataset/govtrack,,,*,
+gtaa,http://datahub.io/dataset/gemeenschappelijke-thesaurus-audiovisuele-archieven,,,gtaa,Falló al generar unos cuantos ficheros
+gutenberg,http://datahub.io/dataset/fu-berlin-project-gutenberg,,,,ni enlaces ni dump
+Hedatuz,http://datahub.io/dataset/hedatuz,,,*,
+hgnc,http://datahub.io/dataset/bio2rdf-hgnc,,,hgnc,
+homologene,http://datahub.io/dataset/bio2rdf-homologene,,,homologene,
+ibm,http://datahub.io/dataset/rkb-explorer-ibm,,,ibm,
+ieee,http://datahub.io/dataset/rkb-explorer-ieee,,,ieee,
+indiana,http://datahub.io/dataset/vivo-indiana-university,,,indiana,
+interpro,http://datahub.io/dataset/bio2rdf-interpro,,,interpro,
+irit,http://datahub.io/dataset/rkb-explorer-irit,,,irit,
+iserve,http://datahub.io/dataset/iserve,,,iserve,
+jamendo,http://datahub.io/dataset/jamendo-dbtune,,,jamendo,
+japan-radioactivity-stat,http://datahub.io/dataset/japan-radioactivity-stat,,,*,
+jisc,http://datahub.io/dataset/rkb-explorer-jisc,,,jisc,
+kegg,http://datahub.io/dataset/bio2rdf-kegg-pathway,,,,lo han puesto privado. A saber.
+kisti,http://datahub.io/dataset/rkb-explorer-kisti,,,kisti,
+klapp,http://datahub.io/dataset/klappstuhlclub,,,klapp,
+knoesis-linked-sensor-data,http://datahub.io/dataset/knoesis-linked-sensor-data,,,*,
+laas,http://datahub.io/dataset/rkb-explorer-laas,,,laas,
+LCSH,http://datahub.io/dataset/lcsh,,,lcsh,
+lem,http://datahub.io/dataset/lista-encabezamientos-materia,,,lem,
+Lexvo,http://datahub.io/dataset/lexvo,,,lexvo,
+lichfield,http://datahub.io/dataset/lichfield-spending,,,,no carga el dump
+lingvoj,http://datahub.io/dataset/lingvoj,,,lingvoj,
+linked-open-data-of-ecology,http://datahub.io/dataset/linked-open-data-of-ecology,,,*,
+linkedct,http://datahub.io/dataset/linkedct,,,*,
+linkedmdb,http://datahub.io/dataset/linkedmdb,,,linkedmdb,
+lobid-resources,http://datahub.io/dataset/lobid-resources,,,*,
+lod_ecology,http://datahub.io/dataset/linked-open-data-of-ecology,,,,no hay dump
+lov,http://datahub.io/dataset/linked-open-vocabularies-lov,,,lov,
+medicare,http://datahub.io/dataset/fu-berlin-medicare,,,medicare,
+mgi,http://datahub.io/dataset/bio2rdf-mgi,,,mgi,
+morelab,http://datahub.io/dataset/morelab,,,*,
+musicbrainz,http://datahub.io/dataset/dbtune-musicbrainz,,,,no tiene dump
+NDLSH,http://datahub.io/dataset/national-diet-library-subject-headings,,,ndlsh,
+Newcastle,http://datahub.io/dataset/rkb-explorer-newcastle,,,newcastle,
+nsf,http://datahub.io/dataset/rkb-explorer-nsf,,,nsf,
+nszl,http://datahub.io/dataset/hungarian-national-library-catalog,,,,sin dump
+NTNU,http://datahub.io/dataset/ntnusc,,,ntnu,
+nvd,http://datahub.io/dataset/nvd,,,nvd,
+nyt,http://datahub.io/dataset/nytimes-linked-open-data,,,nyt,
+oai,http://datahub.io/dataset/rkb-explorer-oai,,,,no tiene dump
+OAI Similarity,http://datahub.io/dataset/core,,,core,??
+oceandrilling,http://datahub.io/dataset/oceandrilling-codices,,,,no tiene dump
+oecd-linked-data,http://datahub.io/dataset/oecd-linked-data,,,*,
+omim,http://datahub.io/dataset/bio2rdf-omim,,,*,
+OntosNews,http://datahub.io/dataset/ontos-news-portal,,,*,
+open_ac_uk,http://datahub.io/dataset/data-open-ac-uk,,,,no tiene dump
+open_energy,http://datahub.io/dataset/open-energy-info-wiki,,,,no tiene dump
+open-library,http://datahub.io/dataset/open-library,,,,demasiado grande y encima no tiene enlaces
+os,http://datahub.io/dataset/rkb-explorer-os,,,os,
+OSM Semantic Network,http://datahub.io/dataset/osm-semantic-network,,,osm,
+oxpoints,http://datahub.io/dataset/oxpoints,,,,no tiene dump ni enlaces
+pdb,http://datahub.io/dataset/bio2rdf-pdb,,,,lo han cerrado
+peel,http://datahub.io/dataset/dbtune-john-peel-sessions,,,peel,
+pisa,http://datahub.io/dataset/rkb-explorer-pisa,,,pisa,
+pleiades,http://datahub.io/dataset/pleiades,,,pleiades,
+police,http://datahub.io/dataset/hellenic-police,,,police,
+PSH,http://datahub.io/dataset/psh-subject-headings,,,psh,
+pubmed,http://datahub.io/dataset/bio2rdf-pubmed,,,,"en el dump solo estan las estadísticas, no el dataset en si. No tiene enlaces externos"
+rae2001,http://datahub.io/dataset/rkb-explorer-rae2001,,,rae2001,
+reegle,http://datahub.io/dataset/clean-energy-data-reegle,,,reegle,
+resex,http://datahub.io/dataset/rkb-explorer-resex,,,,dump vacio
+risk,http://datahub.io/dataset/rkb-explorer-risks,,,risk,
+roma,http://datahub.io/dataset/rkb-explorer-roma,,,roma,
+SDG,http://datahub.io/dataset/semantic-web-dog-food,,,sdg,
+sec,http://datahub.io/dataset/sec-rdfabout,,,sec,
+secold,http://datahub.io/dataset/secold,,,,caído
+semantic-xbrl,http://datahub.io/dataset/semantic-xbrl,,,*,
+semanticweb,http://datahub.io/dataset/semanticweb-org,,,semanticweb,
+sgd,http://datahub.io/dataset/bio2rdf-sgd,,,sgd,
+sider,http://datahub.io/dataset/fu-berlin-sider,,,sider,
+southampton,http://datahub.io/dataset/rkb-explorer-southampton,,,southampton,
+stw,http://datahub.io/dataset/stw-thesaurus-for-economics,,,stw,
+sztaki,http://datahub.io/dataset/sztaki-lod,,,,no tiene dump
+TCM,http://datahub.io/dataset/tcmgenedit_dataset,,,tcm,
+telegraphis,http://datahub.io/dataset/telegraphis,,,telegraphis,
+thesesfr,http://datahub.io/dataset/thesesfr,,,thesesfr,
+thesoz,http://datahub.io/dataset/gesis-thesoz,,,thesoz,sintaxis incorrecta
+transport-data-gov-uk,http://datahub.io/dataset/transport-data-gov-uk,,,*,
+twc-ieeevis,http://datahub.io/dataset/twc-ieeevis,,,*,
+ulm,http://datahub.io/dataset/rkb-explorer-ulm,,,ulm,
+uniprot-taxonomy,http://datahub.io/dataset/uniprot-taxonomy,,,*,
+uniprot-unipathway,http://datahub.io/dataset/uniprot-unipathway,,,*,
+unlocode,http://datahub.io/dataset/rkb-explorer-unlocode,,,unlocode,
+vivo-university-of-florida,http://datahub.io/dataset/vivo-university-of-florida,,,,"el dump está caído, solo tiene enlaces a dbpedia y el endpoint es fuseki. NO"
+vu-wordnet,http://datahub.io/dataset/vu-wordnet,,,*,
+w3c-wordnet,http://datahub.io/dataset/w3c-wordnet,,,w3c-wordnet,
+wiki,http://datahub.io/dataset/rkb-explorer-wiki,,,wiki,
+wordnet_rkb,http://datahub.io/dataset/rkb-explorer-wordnet,,,wordnet-rkb,
+world-bank-linked-data,http://datahub.io/dataset/world-bank-linked-data,,,*,
+Yovisto,http://datahub.io/dataset/yovisto,,,yovisto,
