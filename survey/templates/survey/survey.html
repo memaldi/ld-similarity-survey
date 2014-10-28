@@ -96,6 +96,7 @@
                     <b>Are these datasets similar or does exist any clear relationship between them?</b> {{ form.similarity }}
                 <input type="hidden" name="source_dataset_id" value="{{source_dataset.id}}"/>
                 <input type='hidden' name="target_dataset_id" value="{{target_dataset.id}}" />
+                <input type='hidden' name="sim_id" value="{{sim_id}}" />
                 <input type="submit" value="Submit" />
             </div>
         {% endif %}

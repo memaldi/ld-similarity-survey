@@ -20,39 +20,39 @@ def survey(request):
             source_id = form.cleaned_data['source_dataset_id']
             target_id = form.cleaned_data['target_dataset_id']
             similarity_str = form.cleaned_data['similarity']
+            sim_id = form.cleaned_data['sim_id']
 
             source_dataset = Dataset.objects.get(id=source_id)
             target_dataset = Dataset.objects.get(id=target_id)
-            similarity = Similarity.objects.filter(source_dataset=source_dataset, target_dataset=target_dataset)
-            if len(similarity) < 3:
-                similarity = Similarity.objects.create(source_dataset=source_dataset, target_dataset=target_dataset, similarity=similarity_str)
-                similarity.save()
-                user.userprofile.points = user.userprofile.points + 1;
-                user.userprofile.rated_datasets.add(similarity)
-                user.userprofile.save()
+
+            similarity = Similarity.objects.get(id=sim_id)
+            similarity.similarity = similarity_str
+            similarity.save()
+            user.userprofile.points = user.userprofile.points + 1;
+            user.userprofile.rated_datasets.add(similarity)
+            user.userprofile.save()
+
 
     selected_source_dataset = None
     selected_target_dataset = None
+    for similarity in Similarity.objects.filter(similarity=None):
+        source_dataset = similarity.source_dataset
+        target_dataset = similarity.target_dataset
+        try:
+            user_rating = user.userprofile.rated_datasets.get(source_dataset=source_dataset, target_dataset=target_dataset)
+        except:
+            user_rating = None
 
-    combinations = itertools.combinations(Dataset.objects.all(), 2)
-
-    for source_dataset, target_dataset in combinations:
-        similarity = Similarity.objects.filter(source_dataset=source_dataset, target_dataset=target_dataset)
-        if len(similarity) < 3:
-            try:
-                user_rating = user.userprofile.rated_datasets.get(source_dataset=source_dataset, target_dataset=target_dataset)
-            except:
-                user_rating = None
-            if user_rating == None:
-                selected_source_dataset = source_dataset
-                selected_target_dataset = target_dataset
-                break
+        if user_rating == None:
+            selected_source_dataset = source_dataset
+            selected_target_dataset = target_dataset
+            break
 
     form = SurveyForm(initial={'similarity': 'undefined'})
 
     top_users = UserProfile.objects.filter(points__gt=0).order_by('-points')[:5]
 
-    return render(request, 'survey/survey.html', {'form': form, 'source_dataset': selected_source_dataset, 'target_dataset': selected_target_dataset, 'top_users': top_users})
+    return render(request, 'survey/survey.html', {'form': form, 'source_dataset': selected_source_dataset, 'target_dataset': selected_target_dataset, 'top_users': top_users, 'sim_id': similarity.id})
 
 def about(request):
     return render(request, 'survey/about.html')
