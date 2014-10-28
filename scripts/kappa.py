@@ -13,7 +13,7 @@ def kappa():
     combinations = itertools.combinations(Dataset.objects.all(), 2)
     for source_dataset, target_dataset in combinations:
         try:
-            sim_list = Similarity.objects.filter(source_dataset=source_dataset, target_dataset=target_dataset)
+            sim_list = Similarity.objects.filter(source_dataset=source_dataset, target_dataset=target_dataset).exclude(similarity=None)
             if len(sim_list) >= 3:
                 N += 1
                 sim_dict = {'yes': 0, 'no': 0, 'undefined': 0}
