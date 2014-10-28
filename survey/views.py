@@ -32,10 +32,11 @@ def survey(request):
             user.userprofile.rated_datasets.add(similarity)
             user.userprofile.save()
 
-
     selected_source_dataset = None
     selected_target_dataset = None
+    sim_id = None
     for similarity in Similarity.objects.filter(similarity=None):
+        sim_id = similarity.id
         source_dataset = similarity.source_dataset
         target_dataset = similarity.target_dataset
         try:
@@ -52,7 +53,7 @@ def survey(request):
 
     top_users = UserProfile.objects.filter(points__gt=0).order_by('-points')[:5]
 
-    return render(request, 'survey/survey.html', {'form': form, 'source_dataset': selected_source_dataset, 'target_dataset': selected_target_dataset, 'top_users': top_users, 'sim_id': similarity.id})
+    return render(request, 'survey/survey.html', {'form': form, 'source_dataset': selected_source_dataset, 'target_dataset': selected_target_dataset, 'top_users': top_users, 'sim_id': sim_id})
 
 def about(request):
     return render(request, 'survey/about.html')
