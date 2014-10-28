@@ -1,3 +1,4 @@
+import itertools
 from django.test import TestCase, TransactionTestCase
 from django.test.client import Client
 from django.contrib.auth.models import User
@@ -7,6 +8,16 @@ from scripts import kappa
 
 # Create your tests here.
 class UserTestCase(TransactionTestCase):
+    def set_up(self):
+        for i in range(6):
+            d = Dataset()
+            d.save()
+        combinations = itertools.combinations(Dataset.objects.all(), 2)
+        print 'Creating similarities...'
+        for source_dataset, target_dataset in combinations:
+            similarity = Similarity(source_dataset=source_dataset, target_dataset=target_dataset, similarity=None)
+            similarity.save()
+
     def test_user(self):
         self.assertEqual(len(User.objects.all()), 0)
         c = Client()
@@ -95,6 +106,11 @@ class RankingTestCase(TransactionTestCase):
         for i in range(5):
             d = Dataset()
             d.save()
+        combinations = itertools.combinations(Dataset.objects.all(), 2)
+        for source_dataset, target_dataset in combinations:
+            for i in range(3):
+                similarity = Similarity(source_dataset=source_dataset, target_dataset=target_dataset, similarity=None)
+                similarity.save()
 
     def test_ranking(self):
         c = Client()
@@ -103,7 +119,8 @@ class RankingTestCase(TransactionTestCase):
             request = c.get('/survey')
             source_dataset = request.context['source_dataset']
             target_dataset = request.context['target_dataset']
-            c.post('/survey', {'source_dataset_id': source_dataset.id, 'target_dataset_id': target_dataset.id, 'similarity': 'yes'})
+            sim_id = request.context['sim_id']
+            c.post('/survey', {'source_dataset_id': source_dataset.id, 'target_dataset_id': target_dataset.id, 'similarity': 'yes', 'sim_id': sim_id})
 
         c = Client()
         c.post('/login/', {'user': 'user1', 'password': 'user1'})
@@ -111,7 +128,8 @@ class RankingTestCase(TransactionTestCase):
             request = c.get('/survey')
             source_dataset = request.context['source_dataset']
             target_dataset = request.context['target_dataset']
-            c.post('/survey', {'source_dataset_id': source_dataset.id, 'target_dataset_id': target_dataset.id, 'similarity': 'yes'})
+            sim_id = request.context['sim_id']
+            c.post('/survey', {'source_dataset_id': source_dataset.id, 'target_dataset_id': target_dataset.id, 'similarity': 'yes', 'sim_id': sim_id})
 
         c = Client()
         c.post('/login/', {'user': 'user2', 'password': 'user2'})
@@ -119,7 +137,8 @@ class RankingTestCase(TransactionTestCase):
             request = c.get('/survey')
             source_dataset = request.context['source_dataset']
             target_dataset = request.context['target_dataset']
-            c.post('/survey', {'source_dataset_id': source_dataset.id, 'target_dataset_id': target_dataset.id, 'similarity': 'yes'})
+            sim_id = request.context['sim_id']
+            c.post('/survey', {'source_dataset_id': source_dataset.id, 'target_dataset_id': target_dataset.id, 'similarity': 'yes', 'sim_id': sim_id})
 
         c = Client()
         c.post('/login/', {'user': 'user3', 'password': 'user3'})
@@ -127,7 +146,8 @@ class RankingTestCase(TransactionTestCase):
             request = c.get('/survey')
             source_dataset = request.context['source_dataset']
             target_dataset = request.context['target_dataset']
-            c.post('/survey', {'source_dataset_id': source_dataset.id, 'target_dataset_id': target_dataset.id, 'similarity': 'yes'})
+            sim_id = request.context['sim_id']
+            c.post('/survey', {'source_dataset_id': source_dataset.id, 'target_dataset_id': target_dataset.id, 'similarity': 'yes', 'sim_id': sim_id})
 
         request = c.get('/ranking/')
         user_list = {}
@@ -147,7 +167,11 @@ class KappaTestCase(TestCase):
         for i in range(5):
             d = Dataset()
             d.save()
-        i = 0
+        combinations = itertools.combinations(Dataset.objects.all(), 2)
+        for source_dataset, target_dataset in combinations:
+            for i in range(3):
+                similarity = Similarity(source_dataset=source_dataset, target_dataset=target_dataset, similarity=None)
+                similarity.save()
         for user in User.objects.all():
             c = Client()
             c.post('/login/', {'user': user.username, 'password': user.username})
@@ -158,14 +182,13 @@ class KappaTestCase(TestCase):
                 if source_dataset == None:
                     break
                 target_dataset = request.context['target_dataset']
-                sim = Similarity.objects.filter(source_dataset=source_dataset, target_dataset=target_dataset)
+                sim_id = request.context['sim_id']
                 try:
                     user_rating = user.userprofile.rated_datasets.get(source_dataset=source_dataset, target_dataset=target_dataset)
                 except:
                     user_rating = None
                 similarity_value = OPTIONS[randint(0,2)]
-                i += 1
-                c.post('/survey', {'source_dataset_id': source_dataset.id, 'target_dataset_id': target_dataset.id, 'similarity': similarity_value})
+                c.post('/survey', {'source_dataset_id': source_dataset.id, 'target_dataset_id': target_dataset.id, 'similarity': similarity_value, 'sim_id': sim_id})
 
     def test_kappa(self):
         kappa_value, pi_values = kappa.kappa()
