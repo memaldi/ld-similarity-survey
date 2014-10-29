@@ -1,4 +1,5 @@
 import itertools
+import redis
 from django.shortcuts import render
 from survey.forms import SurveyForm, UserForm
 from survey.models import Dataset, Similarity, UserProfile
@@ -9,6 +10,8 @@ from django.http import HttpResponseRedirect
 from django.contrib.auth.decorators import login_required
 from django.core.urlresolvers import reverse
 # Create your views here.
+
+r = redis.StrictRedis(host='localhost', port=6379, db=0)
 
 @login_required
 def survey(request):
@@ -44,10 +47,14 @@ def survey(request):
         except:
             user_rating = None
 
-        if user_rating == None:
+        if user_rating == None and r.get('ld_survey:similarity:%s' % sim_id) == None:
             selected_source_dataset = source_dataset
             selected_target_dataset = target_dataset
             break
+
+    if sim_id != None:
+        r.set('ld_survey:similarity:%s' % sim_id, user.username)
+        r.expire('ld_survey:similarity:%s' % sim_id, 300)
 
     form = SurveyForm(initial={'similarity': 'undefined'})
 
