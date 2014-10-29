@@ -1,4 +1,5 @@
 import itertools
+import redis
 from django.test import TestCase, TransactionTestCase
 from django.test.client import Client
 from django.contrib.auth.models import User
@@ -6,9 +7,14 @@ from survey.models import Dataset, Similarity
 from random import randint
 from scripts import kappa
 
+r = redis.StrictRedis(host='localhost', port=6379, db=0)
+
 # Create your tests here.
 class UserTestCase(TransactionTestCase):
     def set_up(self):
+        keys = r.keys('ld_survey:similarity:*')
+        for key in keys:
+            r.delete(key)
         for i in range(6):
             d = Dataset()
             d.save()
@@ -70,6 +76,9 @@ class UserTestCase(TransactionTestCase):
 
 class RatingTestCase(TransactionTestCase):
     def setUp(self):
+        keys = r.keys('ld_survey:similarity:*')
+        for key in keys:
+            r.delete(key)
         for i in range(4):
             c = Client()
             c.post('/register/', {'user': 'user%s' % i, 'password': 'user%s' % i, 'password-repeat': 'user%s' % i})
@@ -100,6 +109,9 @@ class RatingTestCase(TransactionTestCase):
 
 class RankingTestCase(TransactionTestCase):
     def setUp(self):
+        keys = r.keys('ld_survey:similarity:*')
+        for key in keys:
+            r.delete(key)
         for i in range(4):
             c = Client()
             c.post('/register/', {'user': 'user%s' % i, 'password': 'user%s' % i, 'password-repeat': 'user%s' % i})
