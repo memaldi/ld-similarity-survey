@@ -9,7 +9,7 @@ class Dataset(models.Model):
     datahub_url = models.CharField(max_length=2000)
     example_resource = models.CharField(max_length=1000)
     similarity = models.ManyToManyField("self", through='Similarity', symmetrical=False)
-    nick = models.CharField(max_length=2000)
+    nick = models.CharField(max_length=2000, default=None, null=True)
 
 class Similarity(models.Model):
     source_dataset = models.ForeignKey(Dataset, related_name='source_dataset')
