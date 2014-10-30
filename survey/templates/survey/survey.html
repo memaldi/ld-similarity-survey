@@ -40,23 +40,27 @@
     </div>
     </div>
     <div class="row">
-        <div class="col-lg-2">
+        <div class="col-lg-3">
             <div style="padding: 40px 15px;">
                 <div class="well well-sm">
                     <h2>Top users</h2>
                     <ol>
                        {% for item in top_users %}
-                            <li><b>{{item.user.username}} ({{item.points}})</b></li>
+                            {% if item.user.username|length <= 15 %}
+                                <li><b>{{item.user.username}} ({{item.points}})</b></li>
+                            {% else %}
+                                <li><b>{{item.user.username|slice:":13"}}... ({{item.points}})</b></li>
+                            {% endif %}
                        {% endfor %}
                     </ol>
                     <p><a href="{% url 'survey.views.ranking' %}">Full ranking</a></p>
                 </div>
             </div>
         </div>
-        <div class="col-lg-10">
+        <div class="col-lg-9">
             <div class="starter-template">
                     <h1>Linked Data Similarity Survey</h1>
-                    <p class="lead">The objetive of this survey is to stablish similarities among Linked Datasets. Above, two datasets can be seen, with their title, description and an example resource given from their <a href="http://datahub.io/">DataHub.io</a> profile. Based on the information given and exploring their <a href="http://datahub.io/">DataHub.io</a> URL, the objective is to answer to the question 'Are these datasets similar or does exist any clear relationship between them?'. You can answer to the question as many times as you want. Thank you for your time! ;-)
+                    <p style="font-size: 20px;  text-align: justify;">The objetive of this survey is to stablish similarities among Linked Datasets. Above, two datasets can be seen, with their title, description and an example resource given from their <a href="http://datahub.io/">DataHub.io</a> profile. Based on the information given and exploring their <a href="http://datahub.io/">DataHub.io</a> URL, the objective is to answer to the question 'Are these datasets similar or does exist any clear relationship between them?'. You can answer to the question as many times as you want. Thank you for your time! ;-)
                     </p>
             </div>
         </div>
