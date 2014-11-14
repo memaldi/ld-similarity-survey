@@ -1,4 +1,4 @@
-from survey.models import Similarity, Dataset
+from survey.models import Similarity, Dataset, UserProfile
 from django.contrib.auth.models import User
 import itertools
 
@@ -40,7 +40,7 @@ def kappa():
         kappa_value = float(P - Pe) / (1 - Pe)
     return kappa_value, pi_dict
 
-def cohens_kappa(user1, user2):
+def cohens_kappa(user1, user2, log):
 
     user_profile1 = user1.userprofile
     user_profile2 = user2.userprofile
@@ -59,6 +59,8 @@ def cohens_kappa(user1, user2):
     for sim1 in sim_user1:
         for sim2 in sim_user2:
             if (sim1.source_dataset == sim2.source_dataset) and (sim1.target_dataset == sim2.target_dataset):
+                if log:
+                    print sim1.source_dataset, sim1.target_dataset
                 if sim1.similarity == 'yes':
                     user1_yes += 1
                 elif sim1.similarity == 'no':
@@ -76,9 +78,16 @@ def cohens_kappa(user1, user2):
                 if sim1.similarity == sim2.similarity:
                     agreement += 1
                 total += 1
+    if log:
+        print agreement, total, user1_yes, user2_yes, user1_no, user2_no, user1_undefined, user2_undefined
     if total > 0:
         pr_a = float(agreement) / total
-        pr_e = (float(user1_yes)/total * float(user2_yes)/total) + (float(user1_no/total) * float(user2_no/total)) + (float(user1_undefined/total) * float(user2_undefined/total))
+        pr_e = (float(user1_yes)/total * float(user2_yes)/total) + (float(user1_no)/total * float(user2_no)/total) + (float(user1_undefined)/total * float(user2_undefined)/total)
+        if log:
+            print float(user1_yes)/total * float(user2_yes)/total
+            print float(user1_no)/total * float(user2_no)/total
+            print float(user1_undefined)/total * float(user2_undefined)/total
+            print pr_a, pr_e
         if pr_e == 1 and pr_a == 1:
             return 1
         else:
@@ -87,3 +96,43 @@ def cohens_kappa(user1, user2):
 
     else:
         return None
+
+def user_agreement():
+    user_combinations = itertools.combinations(User.objects.all(), 2)
+    result_map = {}
+    for user1, user2 in user_combinations:
+        log = False
+        if 'pcuriel' in [user1.username, user2.username]:
+            log = True
+        c = cohens_kappa(user1, user2, log)
+        if c != None:
+            if 'pcuriel' in [user1.username, user2.username]:
+                print '%s - %s (%s)' % (user1.username, user2.username, c)
+            if user1 not in result_map:
+                result_map[user1] = {}
+            result_map[user1][user2] = c
+
+            if user2 not in result_map:
+                result_map[user2] = {}
+            result_map[user2][user1] = c
+    # print result_map
+    # for user1 in result_map:
+    #     accum = 0
+    #     for user2 in result_map[user1]:
+    #         accum += result_map[user1][user2]
+    #     avg = float(accum) / len(result_map[user1])
+    #     print user1.username
+    #     print 'Avg agreement: %s' % avg
+    #     print '%' * 10
+
+def get_user_ratings(username):
+    user = User.objects.filter(username=username).get()
+    for similarity in user.userprofile.rated_datasets.all():
+        print '%s - %s' % (similarity.source_dataset.title, similarity.target_dataset.title)
+        # userprofiles = similarity.userprofile_set.all()
+        # for up in userprofiles:
+        #     print up.user.username
+        similarities = Similarity.objects.filter(source_dataset=similarity.source_dataset, target_dataset=similarity.target_dataset).exclude(userprofile=user.userprofile).all()
+        for sim in similarities:
+             for userprofile in sim.userprofile_set.all():
+                print userprofile.user.username
