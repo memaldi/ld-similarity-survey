@@ -40,14 +40,67 @@ def kappa():
         kappa_value = float(P - Pe) / (1 - Pe)
     return kappa_value, pi_dict
 
+def computeKappa(mat):
+    """ Computes the Kappa value
+        @param n Number of rating per subjects (number of human raters)
+        @param mat Matrix[subjects][categories]
+        @return The Kappa value """
+    n = checkEachLineCount(mat)   # PRE : every line count must be equal to n
+    N = len(mat)
+    k = len(mat[0])
+
+    if DEBUG:
+        print n, "raters."
+        print N, "subjects."
+        print k, "categories."
+
+    # Computing p[]
+    p = [0.0] * k
+    for j in xrange(k):
+        p[j] = 0.0
+        for i in xrange(N):
+            p[j] += mat[i][j]
+        p[j] /= N*n
+    if DEBUG: print "p =", p
+
+    # Computing P[]
+    P = [0.0] * N
+    for i in xrange(N):
+        P[i] = 0.0
+        for j in xrange(k):
+            P[i] += mat[i][j] * mat[i][j]
+        P[i] = (P[i] - n) / (n * (n - 1))
+    if DEBUG: print "P =", P
+
+    # Computing Pbar
+    Pbar = sum(P) / N
+    if DEBUG: print "Pbar =", Pbar
+
+    # Computing PbarE
+    PbarE = 0.0
+    for pj in p:
+        PbarE += pj * pj
+    if DEBUG: print "PbarE =", PbarE
+
+    kappa = (Pbar - PbarE) / (1 - PbarE)
+    if DEBUG: print "kappa =", kappa
+
+    return kappa
+
+def checkEachLineCount(mat):
+    """ Assert that each line has a constant number of ratings
+        @param mat The matrix checked
+        @return The number of ratings
+        @throws AssertionError If lines contain different number of ratings """
+    n = sum(mat[0])
+
+    assert all(sum(line) == n for line in mat[1:]), "Line count != %d (n value)." % n
+    return n
+
+DEBUG = True
+
 def kappa_limited():
-    N = 0
-    sum_cells = 0
-    n = 3
-    N = 0
-    P = 0
-    pi_dict = {}
-    total_sim = {'yes': 0, 'no': 0, 'undefined': 0}
+    mat = []
     with open('relations.csv') as f:
         for line in f:
             sline = line.split(';')
@@ -56,29 +109,99 @@ def kappa_limited():
             sim_list = []
             sim_list.extend(Similarity.objects.filter(source_dataset=source_dataset, target_dataset=target_dataset).exclude(similarity=None))
             sim_list.extend(Similarity.objects.filter(source_dataset=target_dataset, target_dataset=source_dataset).exclude(similarity=None))
-            if len(sim_list) == 3:
-                N += 1
-                sim_dict = {'yes': 0, 'no': 0, 'undefined': 0}
-                for sim in sim_list:
-                    sum_cells += 1
-                    sim_dict[sim.similarity] += 1
-                    total_sim[sim.similarity] += 1
-                accum = 0
+
+            row = []
+            sim_dict = {'yes': 0, 'no': 0, 'undefined': 0}
+            for sim in sim_list:
+                sim_dict[sim.similarity] += 1
+            row.append(sim_dict['yes'])
+            row.append(sim_dict['no'])
+            row.append(sim_dict['undefined'])
+
+            mat.append(row)
+
+    kappa = computeKappa(mat)
+
+    print kappa
+
+def get_disagreement():
+    user_dict = {}
+    with open('relations.csv') as f:
+        for line in f:
+            sline = line.split(';')
+            source_dataset = Dataset.objects.get(nick=sline[0])
+            target_dataset = Dataset.objects.get(nick=sline[1])
+            sim_list = []
+            sim_list.extend(Similarity.objects.filter(source_dataset=source_dataset, target_dataset=target_dataset).exclude(similarity=None))
+            sim_list.extend(Similarity.objects.filter(source_dataset=target_dataset, target_dataset=source_dataset).exclude(similarity=None))
+
+            sim_dict = {'yes': 0, 'no': 0, 'undefined': 0}
+            for sim in sim_list:
+                sim_dict[sim.similarity] += 1
+            disagreed = False
+            for key in sim_dict:
+                if sim_dict[key] == 2:
+                    disagreed = True
+
+            if disagreed:
+                dis_value = ''
                 for key in sim_dict:
-                    accum += pow(sim_dict[key], 2)
-                accum = accum - n
-                pi = float(1) / (n * (n - 1)) * accum
-                pi_dict[(source_dataset.title, target_dataset.title)] = pi
-                P += pi
-        P =  (float(1) / N) * P
-        Pe = 0
-        for key in total_sim:
-            Pe += pow(float(total_sim[key])/sum_cells, 2)
-        if Pe == 1:
-            kappa_value = 1
-        else:
-            kappa_value = float(P - Pe) / (1 - Pe)
-        return kappa_value, pi_dict
+                    if sim_dict[key] == 1:
+                        dis_value = key
+                # print sim_dict
+                # print dis_value
+                for sim in sim_list:
+                    if sim.similarity == dis_value:
+                        if sim.userprofile_set.first().user.username not in user_dict:
+                            user_dict[sim.userprofile_set.first().user.username] = 0
+                        user_dict[sim.userprofile_set.first().user.username] += 1
+
+    for key in user_dict:
+        user = User.objects.get(username=key)
+        userprofile = UserProfile.objects.get(user=user)
+        print '%s (%s)' % (key, float(user_dict[key]) / len(userprofile.rated_datasets.all()))
+
+
+# def kappa_limited():
+#     N = 0
+#     sum_cells = 0
+#     n = 3
+#     N = 0
+#     P = 0
+#     pi_dict = {}
+#     total_sim = {'yes': 0, 'no': 0, 'undefined': 0}
+#     with open('relations.csv') as f:
+#         for line in f:
+#             sline = line.split(';')
+#             source_dataset = Dataset.objects.get(nick=sline[0])
+#             target_dataset = Dataset.objects.get(nick=sline[1])
+#             sim_list = []
+#             sim_list.extend(Similarity.objects.filter(source_dataset=source_dataset, target_dataset=target_dataset).exclude(similarity=None))
+#             sim_list.extend(Similarity.objects.filter(source_dataset=target_dataset, target_dataset=source_dataset).exclude(similarity=None))
+#             if len(sim_list) == 3:
+#                 N += 1
+#                 sim_dict = {'yes': 0, 'no': 0, 'undefined': 0}
+#                 for sim in sim_list:
+#                     sum_cells += 1
+#                     sim_dict[sim.similarity] += 1
+#                     total_sim[sim.similarity] += 1
+#                 accum = 0
+#                 for key in sim_dict:
+#                     accum += pow(sim_dict[key], 2)
+#                 accum = accum - n
+#                 pi = float(1) / (n * (n - 1)) * accum
+#                 pi_dict[(source_dataset.title, target_dataset.title)] = pi
+#                 P += pi
+#         P =  (float(1) / N) * P
+#         Pe = 0
+#         for key in total_sim:
+#             Pe += pow(float(total_sim[key])/sum_cells, 2)
+#         if Pe == 1:
+#             kappa_value = 1
+#         else:
+#             kappa_value = float(P - Pe) / (1 - Pe)
+
+#         return kappa_value, pi_dict
 
 
 def list_datasets():
