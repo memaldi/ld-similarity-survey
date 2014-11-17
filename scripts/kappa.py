@@ -40,6 +40,51 @@ def kappa():
         kappa_value = float(P - Pe) / (1 - Pe)
     return kappa_value, pi_dict
 
+def kappa_limited():
+    N = 0
+    sum_cells = 0
+    n = 3
+    N = 0
+    P = 0
+    pi_dict = {}
+    total_sim = {'yes': 0, 'no': 0, 'undefined': 0}
+    with open('relations.csv') as f:
+        for line in f:
+            sline = line.split(';')
+            source_dataset = Dataset.objects.get(nick=sline[0])
+            target_dataset = Dataset.objects.get(nick=sline[1])
+            sim_list = []
+            sim_list.extend(Similarity.objects.filter(source_dataset=source_dataset, target_dataset=target_dataset).exclude(similarity=None))
+            sim_list.extend(Similarity.objects.filter(source_dataset=target_dataset, target_dataset=source_dataset).exclude(similarity=None))
+            if len(sim_list) == 3:
+                N += 1
+                sim_dict = {'yes': 0, 'no': 0, 'undefined': 0}
+                for sim in sim_list:
+                    sum_cells += 1
+                    sim_dict[sim.similarity] += 1
+                    total_sim[sim.similarity] += 1
+                accum = 0
+                for key in sim_dict:
+                    accum += pow(sim_dict[key], 2)
+                accum = accum - n
+                pi = float(1) / (n * (n - 1)) * accum
+                pi_dict[(source_dataset.title, target_dataset.title)] = pi
+                P += pi
+        P =  (float(1) / N) * P
+        Pe = 0
+        for key in total_sim:
+            Pe += pow(float(total_sim[key])/sum_cells, 2)
+        if Pe == 1:
+            kappa_value = 1
+        else:
+            kappa_value = float(P - Pe) / (1 - Pe)
+        return kappa_value, pi_dict
+
+
+def list_datasets():
+    for dataset in Dataset.objects.order_by('title').all():
+        print dataset.title
+
 def cohens_kappa(user1, user2, log):
 
     user_profile1 = user1.userprofile
@@ -55,12 +100,13 @@ def cohens_kappa(user1, user2, log):
     user2_undefined = 0
     agreement = 0
     total = 0
-
+    if log:
+        print user1.username, user2.username
     for sim1 in sim_user1:
         for sim2 in sim_user2:
             if (sim1.source_dataset == sim2.source_dataset) and (sim1.target_dataset == sim2.target_dataset):
                 if log:
-                    print sim1.source_dataset, sim1.target_dataset
+                    print sim1.source_dataset.title, sim1.target_dataset.title, sim1.similarity, sim2.similarity
                 if sim1.similarity == 'yes':
                     user1_yes += 1
                 elif sim1.similarity == 'no':
@@ -102,12 +148,8 @@ def user_agreement():
     result_map = {}
     for user1, user2 in user_combinations:
         log = False
-        if 'pcuriel' in [user1.username, user2.username]:
-            log = True
         c = cohens_kappa(user1, user2, log)
         if c != None:
-            if 'pcuriel' in [user1.username, user2.username]:
-                print '%s - %s (%s)' % (user1.username, user2.username, c)
             if user1 not in result_map:
                 result_map[user1] = {}
             result_map[user1][user2] = c
@@ -115,15 +157,15 @@ def user_agreement():
             if user2 not in result_map:
                 result_map[user2] = {}
             result_map[user2][user1] = c
-    # print result_map
-    # for user1 in result_map:
-    #     accum = 0
-    #     for user2 in result_map[user1]:
-    #         accum += result_map[user1][user2]
-    #     avg = float(accum) / len(result_map[user1])
-    #     print user1.username
-    #     print 'Avg agreement: %s' % avg
-    #     print '%' * 10
+    print result_map
+    for user1 in result_map:
+        accum = 0
+        for user2 in result_map[user1]:
+            accum += result_map[user1][user2]
+        avg = float(accum) / len(result_map[user1])
+        print user1.username
+        print 'Avg agreement: %s' % avg
+        print '%' * 10
 
 def get_user_ratings(username):
     user = User.objects.filter(username=username).get()
