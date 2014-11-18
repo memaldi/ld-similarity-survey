@@ -188,7 +188,7 @@ def kappa(excluded_users):
                 mat.append(row)
 
     kappa = computeKappa(mat)
-    print kappa
+    return kappa
 
 def get_disagreement():
     user_dict = {}

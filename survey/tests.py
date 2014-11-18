@@ -203,5 +203,6 @@ class KappaTestCase(TestCase):
                 c.post('/survey', {'source_dataset_id': source_dataset.id, 'target_dataset_id': target_dataset.id, 'similarity': similarity_value, 'sim_id': sim_id})
 
     def test_kappa(self):
-        kappa_value, pi_values = kappa.kappa()
+        kappa_value = kappa.kappa([])
+        print kappa_value
         self.assertTrue(-1 <= kappa_value <= 1)
