@@ -1,44 +1,8 @@
 from survey.models import Similarity, Dataset, UserProfile
 from django.contrib.auth.models import User
+from hypertable.thriftclient import *
+from hyperthrift.gen.ttypes import *
 import itertools
-
-# def kappa():
-#     combinations = itertools.combinations(Dataset.objects.all(), 2)
-#     sum_cells = 0
-#     n = 3
-#     N = 0
-#     P = 0
-#     pi_dict = {}
-#     total_sim = {'yes': 0, 'no': 0, 'undefined': 0}
-#     combinations = itertools.combinations(Dataset.objects.all(), 2)
-#     for source_dataset, target_dataset in combinations:
-#         try:
-#             sim_list = Similarity.objects.filter(source_dataset=source_dataset, target_dataset=target_dataset).exclude(similarity=None)
-#             if len(sim_list) >= 3:
-#                 N += 1
-#                 sim_dict = {'yes': 0, 'no': 0, 'undefined': 0}
-#                 for sim in sim_list:
-#                     sum_cells += 1
-#                     sim_dict[sim.similarity] += 1
-#                     total_sim[sim.similarity] += 1
-#                 accum = 0
-#                 for key in sim_dict:
-#                     accum += pow(sim_dict[key], 2)
-#                 accum = accum - n
-#                 pi = float(1) / (n * (n - 1)) * accum
-#                 pi_dict[(source_dataset, target_dataset)] = pi
-#                 P += pi
-#         except Exception as e:
-#             print e
-#     P =  (float(1) / N) * P
-#     Pe = 0
-#     for key in total_sim:
-#         Pe += pow(float(total_sim[key])/sum_cells, 2)
-#     if Pe == 1:
-#         kappa_value = 1
-#     else:
-#         kappa_value = float(P - Pe) / (1 - Pe)
-#     return kappa_value, pi_dict
 
 def computeKappa(mat):
     """ Computes the Kappa value
@@ -153,15 +117,58 @@ def get_three():
     print count3
 
 def export_totally_agreement_datasets():
+    client = ThriftClient("localhost", 15867)
+    ns = client.namespace_open("gs")
+
+    column_families = {}
+    column_families["links"] = ColumnFamilySpec("links")
+    column_families["nickname"] = ColumnFamilySpec("nickname")
+    schema = Schema(column_families = column_families)
+
+    client.table_create(ns, "usergs", schema)
+
+    dataset_dict = {}
+
     datasets = itertools.combinations(Dataset.objects.all(), 2)
     for source_dataset, target_dataset in datasets:
-        sim_list = []
-        sim_list.extend(Similarity.objects.filter(source_dataset=source_dataset, target_dataset=target_dataset).exclude(similarity=None))
-        sim_list.extend(Similarity.objects.filter(source_dataset=target_dataset, target_dataset=source_dataset).exclude(similarity=None))
-        if len(sim_list) == 3:
-            if sim_list[0].similarity == sim_list[1].similarity and sim_list[1].similarity == sim_list[2].similarity:
-                pass
-                # Write in hbase
+        if None not in [source_dataset.nick, target_dataset.nick]:
+            sim_list = []
+            sim_list.extend(Similarity.objects.filter(source_dataset=source_dataset, target_dataset=target_dataset).exclude(similarity=None))
+            sim_list.extend(Similarity.objects.filter(source_dataset=target_dataset, target_dataset=source_dataset).exclude(similarity=None))
+            if len(sim_list) == 3:
+                if sim_list[0].similarity == sim_list[1].similarity and sim_list[1].similarity == sim_list[2].similarity:
+                    if sim_list[0].similarity == 'yes':
+                        if source_dataset.nick not in dataset_dict:
+                            dataset_dict[source_dataset.nick] = {}
+                            dataset_dict[source_dataset.nick]['nick'] = source_dataset.nick
+                            dataset_dict[source_dataset.nick]['links'] = []
+                        if target_dataset.nick not in dataset_dict[source_dataset.nick]['links']:
+                            dataset_dict[source_dataset.nick]['links'].append(target_dataset.nick)
+
+                        if target_dataset.nick not in dataset_dict:
+                            dataset_dict[target_dataset.nick] = {}
+                            dataset_dict[target_dataset.nick]['nick'] = target_dataset.nick
+                            dataset_dict[target_dataset.nick]['links'] = []
+                        if source_dataset.nick not in dataset_dict[target_dataset.nick]['links']:
+                            dataset_dict[target_dataset.nick]['links'].append(source_dataset.nick)
+
+    cells = []
+    for source_dataset in dataset_dict:
+        key = Key(row = source_dataset, column_family = "nickname")
+        cell = Cell(key, dataset_dict[source_dataset]['nick'])
+        cells.append(cell)
+        links = ''
+        for target_dataset in dataset_dict[source_dataset]['links']:
+            links += ',%s' % target_dataset
+
+        key = Key(row = source_dataset, column_family = "links")
+        cell = Cell(key, links)
+        cells.append(cell)
+
+    client.set_cells(ns, "usergs", cells);
+
+    client.namespace_close(ns);
+
 
 def kappa(excluded_users):
     mat = []
@@ -227,56 +234,9 @@ def get_disagreement():
         userprofile = UserProfile.objects.get(user=user)
         print '%s (%s)' % (key, float(user_dict[key]) / len(userprofile.rated_datasets.all()))
 
-
-
-# def kappa_limited():
-#     N = 0
-#     sum_cells = 0
-#     n = 3
-#     N = 0
-#     P = 0
-#     pi_dict = {}
-#     total_sim = {'yes': 0, 'no': 0, 'undefined': 0}
-#     with open('relations.csv') as f:
-#         for line in f:
-#             sline = line.split(';')
-#             source_dataset = Dataset.objects.get(nick=sline[0])
-#             target_dataset = Dataset.objects.get(nick=sline[1])
-#             sim_list = []
-#             sim_list.extend(Similarity.objects.filter(source_dataset=source_dataset, target_dataset=target_dataset).exclude(similarity=None))
-#             sim_list.extend(Similarity.objects.filter(source_dataset=target_dataset, target_dataset=source_dataset).exclude(similarity=None))
-#             if len(sim_list) == 3:
-#                 N += 1
-#                 sim_dict = {'yes': 0, 'no': 0, 'undefined': 0}
-#                 for sim in sim_list:
-#                     sum_cells += 1
-#                     sim_dict[sim.similarity] += 1
-#                     total_sim[sim.similarity] += 1
-#                 accum = 0
-#                 for key in sim_dict:
-#                     accum += pow(sim_dict[key], 2)
-#                 accum = accum - n
-#                 pi = float(1) / (n * (n - 1)) * accum
-#                 pi_dict[(source_dataset.title, target_dataset.title)] = pi
-#                 P += pi
-#         P =  (float(1) / N) * P
-#         Pe = 0
-#         for key in total_sim:
-#             Pe += pow(float(total_sim[key])/sum_cells, 2)
-#         if Pe == 1:
-#             kappa_value = 1
-#         else:
-#             kappa_value = float(P - Pe) / (1 - Pe)
-
-#         return kappa_value, pi_dict
-
-
 def list_datasets():
     for dataset in Dataset.objects.order_by('title').all():
         print dataset.title
-
-def cohens_kappa(user1, user2, subjects):
-    pass
 
 def user_agreement():
     datasets = []
