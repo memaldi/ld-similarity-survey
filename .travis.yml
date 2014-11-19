@@ -7,5 +7,10 @@ services:
   - redis-server
 # command to install dependencies
 install: "pip install -r requirements.txt"
+
+before_script:
+    - wget http://cdn.hypertable.com/packages/0.9.8.0/hypertable-0.9.8.0-linux-x86_64.tar.bz2
+    - cp -r hypertable-0.9.8.0-linux-x86_64/opt/hypertable/0.9.8.0/lib/py/hypertable .
+    - cp -r hypertable-0.9.8.0-linux-x86_64/opt/hypertable/0.9.8.0/lib/py/gen-py/hyperthrift .
 # command to run tests
 script: python manage.py test --settings=travis_settings
