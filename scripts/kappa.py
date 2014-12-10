@@ -116,7 +116,7 @@ def get_three():
     print count2
     print count3
 
-def export_totally_agreement_datasets():
+def export_totally_agreement_datasets(partial):
     client = ThriftClient("localhost", 15867)
     ns = client.namespace_open("gs")
 
@@ -136,8 +136,30 @@ def export_totally_agreement_datasets():
             sim_list.extend(Similarity.objects.filter(source_dataset=source_dataset, target_dataset=target_dataset).exclude(similarity=None))
             sim_list.extend(Similarity.objects.filter(source_dataset=target_dataset, target_dataset=source_dataset).exclude(similarity=None))
             if len(sim_list) == 3:
+                append_link = False
+                sim_value = None
                 if sim_list[0].similarity == sim_list[1].similarity and sim_list[1].similarity == sim_list[2].similarity:
-                    if sim_list[0].similarity == 'yes':
+                    #print sim_list[0].similarity, sim_list[1].similarity, sim_list[2].similarity
+                    append_link = True
+                    sim_value = sim_list[0].similarity[0]
+                elif partial:
+                    sim_count = 0
+                    if sim_list[0].similarity == sim_list[1].similarity:
+                        sim_count += 1
+                        sim_value = sim_list[0].similarity
+                    if sim_list[0].similarity == sim_list[2].similarity:
+                        sim_count += 1
+                        sim_value = sim_list[0].similarity
+                    if sim_list[1].similarity == sim_list[2].similarity:
+                        sim_count += 1
+                        sim_value = sim_list[1].similarity
+                    if sim_count >= 1:
+                        append_link = True
+                    else:
+                        print sim_list[0].similarity, sim_list[1].similarity, sim_list[2].similarity
+
+                if append_link:
+                    if sim_value == 'yes':
                         if source_dataset.nick not in dataset_dict:
                             dataset_dict[source_dataset.nick] = {}
                             dataset_dict[source_dataset.nick]['nick'] = source_dataset.nick
@@ -151,6 +173,7 @@ def export_totally_agreement_datasets():
                             dataset_dict[target_dataset.nick]['links'] = []
                         if source_dataset.nick not in dataset_dict[target_dataset.nick]['links']:
                             dataset_dict[target_dataset.nick]['links'].append(source_dataset.nick)
+
 
     cells = []
     for source_dataset in dataset_dict:
@@ -254,6 +277,62 @@ def user_agreement():
         if k != None:
             print '%s - %s (%s)' % (user1.username, user2.username, k)
 
+def all_user_agreement(output, log=False):
+    anom_dict = {}
+    result_dict = {}
+    csv = open(output, 'w')
+    all_users = []
+    all_users = [x.username.encode('utf-8') for x in User.objects.all().exclude(username='user1').exclude(username='user2') if len(x.userprofile.rated_datasets.all()) > 0]
+    print all_users
+    header = 'User'
+    i = 0
+    for item in all_users:
+        anom_dict[item] = 'evaluador-%s' % i
+        header += ';%s' % 'evaluador-%s' % i
+        i += 1
+    header += '\n'
+    csv.write(header)
+    users = itertools.combinations([x for x in User.objects.all().exclude(username='user1').exclude(username='user2') if len(x.userprofile.rated_datasets.all()) > 0], 2)
+    datasets = []
+    for source, target in itertools.permutations(Dataset.objects.all(), 2):
+        datasets.append((source, target))
+    for user1, user2 in users:
+        if user1.username.encode('utf-8') not in result_dict:
+            empty_list = []
+            for item in all_users:
+                empty_list.append('-1')
+            result_dict[user1.username.encode('utf-8')] = empty_list
+        if user2.username.encode('utf-8') not in result_dict:
+            empty_list = []
+            for item in all_users:
+                empty_list.append('-1')
+            result_dict[user2.username.encode('utf-8')] = empty_list
+
+        k = cohens_kappa(user1, user2, datasets, log)
+        if k == None:
+            k = -1
+        elif k < 0:
+            k = 0
+
+
+        #csv.write('%s;%s;%s\n' % (user1.username.encode('utf-8'), user2.username.encode('utf-8'), k))
+        pos = all_users.index(user2.username.encode('utf-8'))
+        result_dict[user1.username.encode('utf-8')].insert(pos, k)
+        result_dict[user1.username.encode('utf-8')].pop(pos + 1)
+
+        pos = all_users.index(user1.username.encode('utf-8'))
+        result_dict[user2.username.encode('utf-8')].insert(pos, k)
+        result_dict[user2.username.encode('utf-8')].pop(pos + 1)
+        if k != None:
+            print '%s - %s (%s)' % (user1.username, user2.username, k)
+    for item in all_users:
+        result_list = result_dict[item]
+        line = anom_dict[item]
+        for result in result_list:
+            line += ';%s' % result
+        line += '\n'
+        csv.write(line)
+    csv.close()
 
 
 def cohens_kappa(user1, user2, datasets, log):
