@@ -3,6 +3,7 @@ from django.contrib.auth.models import User
 from hypertable.thriftclient import *
 from hyperthrift.gen.ttypes import *
 import itertools
+import requests
 
 def computeKappa(mat):
     """ Computes the Kappa value
@@ -427,3 +428,87 @@ def get_user_ratings(username):
         for sim in similarities:
              for userprofile in sim.userprofile_set.all():
                 print userprofile.user.username
+
+
+def get_id(url):
+    return url.replace('http://datahub.io/dataset/', '').replace('\n', '')
+
+
+
+def create_dataset(sline):
+
+    DATAHUB_API_URL = 'http://datahub.io/api/3'
+
+    url = sline[1]
+    params = {'id': get_id(url)}
+    print params
+    r = requests.get('%s/action/package_show' % DATAHUB_API_URL, params=params)
+    json_data = r.json()
+    title = ''
+    description = ''
+    print json_data
+    if 'title' in json_data['result']:
+        if json_data['result']['title'] != None:
+            title = json_data['result']['title']
+    if 'notes' in json_data['result']:
+        if json_data['result']['notes'] != None:
+            description = json_data['result']['notes']
+    example_resource = ''
+    for resource in json_data['result']['resources']:
+        if resource['format'] == 'example/rdf+xml':
+            if resource['url'] != None:
+                example_resource = resource['url']
+    print 'Saving %s...' % title
+    dataset = Dataset()
+    dataset.title = title
+    dataset.description = description
+    dataset.datahub_url = url
+    dataset.example_resource = example_resource
+    dataset.save()
+
+    return dataset
+
+def import_fp(fp_file_name):
+
+    dataset_dict = {}
+    i = 0
+    with open('survey_datasets.csv') as survey_datasets:
+        for line in survey_datasets:
+            if i > 0:
+                sline = line.split(',')
+                dataset_dict[sline[4]] = sline
+            i += 1
+
+    #Load datasets
+
+    with open(fp_file_name) as fp_file:
+        for line in fp_file:
+            sline = line.split(';')
+            source_dataset_name = sline[0].replace('.g', '').replace('\n', '')
+            target_dataset_name = sline[1].replace('.g', '').replace('\n', '')
+            try:
+                source_dataset = Dataset.objects.get(nick=source_dataset_name)
+            except:
+                source_dataset = create_dataset(dataset_dict[source_dataset_name])
+            try:
+                target_dataset = Dataset.objects.get(nick=target_dataset_name)
+            except:
+                target_dataset = create_dataset(dataset_dict[target_dataset_name])
+            similarity_source = Similarity.objects.filter(source_dataset=source_dataset, target_dataset=target_dataset)
+            similarity_target = Similarity.objects.filter(source_dataset=target_dataset, target_dataset=source_dataset)
+            if len(similarity_target) <= 0:
+                for i in range(3 - len(similarity_source)):
+                    print 'Creating similarity for %s - %s' % (source_dataset.nick, target_dataset.nick)
+                    similarity = Similarity()
+                    similarity.source_dataset = source_dataset
+                    similarity.target_dataset = target_dataset
+                    similarity.similarity = None
+                    similarity.save()
+            else:
+                for i in range(3 - len(similarity_target)):
+                    print 'Creating similarity for %s - %s' % (target_dataset.nick, source_dataset.nick)
+                    similarity = Similarity()
+                    similarity.source_dataset = source_dataset
+                    similarity.target_dataset = target_dataset
+                    similarity.similarity = None
+                    similarity.save()
