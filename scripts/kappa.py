@@ -496,19 +496,10 @@ def import_fp(fp_file_name):
                 target_dataset = create_dataset(dataset_dict[target_dataset_name])
             similarity_source = Similarity.objects.filter(source_dataset=source_dataset, target_dataset=target_dataset)
             similarity_target = Similarity.objects.filter(source_dataset=target_dataset, target_dataset=source_dataset)
-            if len(similarity_target) <= 0:
-                for i in range(3 - len(similarity_source)):
-                    print 'Creating similarity for %s - %s' % (source_dataset.nick, target_dataset.nick)
-                    similarity = Similarity()
-                    similarity.source_dataset = source_dataset
-                    similarity.target_dataset = target_dataset
-                    similarity.similarity = None
-                    similarity.save()
-            else:
-                for i in range(3 - len(similarity_target)):
-                    print 'Creating similarity for %s - %s' % (target_dataset.nick, source_dataset.nick)
-                    similarity = Similarity()
-                    similarity.source_dataset = source_dataset
-                    similarity.target_dataset = target_dataset
-                    similarity.similarity = None
-                    similarity.save()
+            for i in range(3 - len(similarity_source) - len(similarity_target)):
+            	print 'Creating similarity for %s - %s' % (source_dataset.nick, target_dataset.nick)
+                similarity = Similarity()
+                similarity.source_dataset = source_dataset
+                similarity.target_dataset = target_dataset
+                similarity.similarity = None
+                similarity.save()
