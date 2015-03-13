@@ -118,7 +118,7 @@ def get_three():
     print count3
 
 def export_totally_agreement_datasets(partial):
-    client = ThriftClient("localhost", 15867)
+    client = ThriftClient("helheim.deusto.es", 15867)
     ns = client.namespace_open("gs")
 
     column_families = {}
@@ -139,10 +139,12 @@ def export_totally_agreement_datasets(partial):
             if len(sim_list) == 3:
                 append_link = False
                 sim_value = None
+		print source_dataset.nick, target_dataset.nick, sim_list[0].similarity, sim_list[1].similarity, sim_list[2].similarity
                 if sim_list[0].similarity == sim_list[1].similarity and sim_list[1].similarity == sim_list[2].similarity:
                     #print sim_list[0].similarity, sim_list[1].similarity, sim_list[2].similarity
+		    print 'Append!'
                     append_link = True
-                    sim_value = sim_list[0].similarity[0]
+                    sim_value = sim_list[0].similarity
                 elif partial:
                     sim_count = 0
                     if sim_list[0].similarity == sim_list[1].similarity:
@@ -157,7 +159,8 @@ def export_totally_agreement_datasets(partial):
                     if sim_count >= 1:
                         append_link = True
                     else:
-                        print sim_list[0].similarity, sim_list[1].similarity, sim_list[2].similarity
+			pass
+                        #print sim_list[0].similarity, sim_list[1].similarity, sim_list[2].similarity
 
                 if append_link:
                     if sim_value == 'yes':
@@ -175,6 +178,8 @@ def export_totally_agreement_datasets(partial):
                         if source_dataset.nick not in dataset_dict[target_dataset.nick]['links']:
                             dataset_dict[target_dataset.nick]['links'].append(source_dataset.nick)
 
+
+    print dataset_dict
 
     cells = []
     for source_dataset in dataset_dict:
